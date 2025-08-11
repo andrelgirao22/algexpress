@@ -55,8 +55,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     
     boolean existsByEmail(String email);
     
-    @Query("SELECT u FROM User u WHERE DATE(u.createdAt) = CURRENT_DATE")
-    List<User> findUsersCreatedToday();
+    //@Query("SELECT u FROM User u WHERE DATE(u.createdAt) = CURRENT_DATE")
+    @Query("SELECT u FROM User u WHERE u.createdAt >= :startOfDay AND u.createdAt < :endOfDay")
+    List<User> findUsersCreatedBetween(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
     
     @Query("SELECT u FROM User u WHERE u.lastLogin BETWEEN :startDate AND :endDate ORDER BY u.lastLogin DESC")
     List<User> findUsersByLastLoginBetween(@Param("startDate") LocalDateTime startDate, 

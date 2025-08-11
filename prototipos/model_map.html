@@ -1,0 +1,134 @@
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+            rel="stylesheet"
+            as="style"
+            onload="this.rel='stylesheet'"
+            href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>Stitch Design</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body>
+<div class="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+    <div class="layout-container flex h-full grow flex-col">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf4] px-10 py-3">
+            <div class="flex items-center gap-4 text-[#0d141c]">
+                <div class="size-4">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor"></path>
+                    </svg>
+                </div>
+                <h2 class="text-[#0d141c] text-lg font-bold leading-tight tracking-[-0.015em]">Pizza Delivery</h2>
+            </div>
+            <div class="flex flex-1 justify-end gap-8">
+                <div class="flex items-center gap-9">
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="#">Dashboard</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="#">Orders</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="#">Drivers</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="#">Customers</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="#">Reports</a>
+                </div>
+                <button
+                        class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-[#e7edf4] text-[#0d141c] gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5"
+                >
+                    <div class="text-[#0d141c]" data-icon="Bell" data-size="20px" data-weight="regular">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                            <path
+                                    d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"
+                            ></path>
+                        </svg>
+                    </div>
+                </button>
+                <div
+                        class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBwzPSFVmBiwQLJqTIb6bSVuQzdB63CyDTtldVEt6LZX_7WgJcXz9A8iGG5lmnNcSwXD60_T77DDFy85lSIaMOCej6FEgfvevAYrG9P2ePAn4mNDOOD5oU-PaVgW2lLHWdlHUlf_7ULRhXiiJJTfLWdBLS4Dbjvb7EElewVUuiyjEjfXt3RKdPyNfm_7Rpz7T0tVasW-COxBJe8o3XgGr2TkW_cU6ATAWrjO8B2VDXX8d07iXhYNWU4D4WgOkgSjkO8XjK4RVl02XQ_");'
+                ></div>
+            </div>
+        </header>
+        <div class="px-40 flex flex-1 justify-center py-5">
+            <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                <div class="flex flex-wrap justify-between gap-3 p-4">
+                    <p class="text-[#0d141c] tracking-light text-[32px] font-bold leading-tight min-w-72">Delivery Management</p>
+                </div>
+                <div class="@container flex flex-col h-full flex-1">
+                    <div class="flex flex-1 flex-col @[480px]:px-4 @[480px]:py-3">
+                        <div
+                                class="bg-cover bg-center flex min-h-[320px] flex-1 flex-col justify-between px-4 pb-4 pt-5 @[480px]:rounded-lg @[480px]:px-8 @[480px]:pb-6 @[480px]:pt-8"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAPG7MZvCDxZ_40-SNtItJo236vyXkdeCGweJc997G-JpZlZRQugCO33pCyt2z-PMJ0OeOQODDL3rLODM58OZLFO-ABemJ_dW2WztCpZ5P8n5icnaveJZUBMQ8GYaGDOhBJhL4t_DgRg7nGXw-cPQ-qmn9cYS0olj0xz55br24EtzkkysXeQUf67hv8lt5qY3gHaYpZLiUpZ-3K-YnohVGwhVuUXGW7BEo7xAHO2uozpTG-7UIA10_bjv4bf3-04TYfQc1KNqQdRjuw");'
+                        >
+                            <label class="flex flex-col min-w-40 h-12">
+                                <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+                                    <div
+                                            class="text-[#49739c] flex border-none bg-slate-50 items-center justify-center pl-4 rounded-l-lg border-r-0"
+                                            data-icon="MagnifyingGlass"
+                                            data-size="24px"
+                                            data-weight="regular"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                            <path
+                                                    d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"
+                                            ></path>
+                                        </svg>
+                                    </div>
+                                    <input
+                                            placeholder="Search for a location"
+                                            class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0d141c] focus:outline-0 focus:ring-0 border-none bg-slate-50 focus:border-none h-full placeholder:text-[#49739c] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                                            value=""
+                                    />
+                                </div>
+                            </label>
+                            <div class="flex flex-col items-end gap-3">
+                                <div class="flex flex-col gap-0.5">
+                                    <button class="flex size-10 items-center justify-center rounded-t-lg bg-slate-50 shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
+                                        <div class="text-[#0d141c]" data-icon="Plus" data-size="24px" data-weight="regular">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                                <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
+                                            </svg>
+                                        </div>
+                                    </button>
+                                    <button class="flex size-10 items-center justify-center rounded-b-lg bg-slate-50 shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
+                                        <div class="text-[#0d141c]" data-icon="Minus" data-size="24px" data-weight="regular">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                                <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128Z"></path>
+                                            </svg>
+                                        </div>
+                                    </button>
+                                </div>
+                                <button class="flex size-10 items-center justify-center rounded-lg bg-slate-50 shadow-[0_2px_4px_rgba(0,0,0,0.1)]">
+                                    <div class="text-[#0d141c]" data-icon="NavigationArrow" data-size="24px" data-weight="regular">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256" transform="scale(-1, 1)">
+                                            <path
+                                                    d="M229.33,98.21,53.41,33l-.16-.05A16,16,0,0,0,32.9,53.25a1,1,0,0,0,.05.16L98.21,229.33A15.77,15.77,0,0,0,113.28,240h.3a15.77,15.77,0,0,0,15-11.29l23.56-76.56,76.56-23.56a16,16,0,0,0,.62-30.38ZM224,113.3l-76.56,23.56a16,16,0,0,0-10.58,10.58L113.3,224h0l-.06-.17L48,48l175.82,65.22.16.06Z"
+                                            ></path>
+                                        </svg>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end overflow-hidden px-5 pb-5">
+                    <button
+                            class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-14 px-5 bg-[#0d80f2] text-slate-50 text-base font-bold leading-normal tracking-[0.015em] min-w-0 gap-4 pl-4 pr-6"
+                    >
+                        <div class="text-slate-50" data-icon="MapPin" data-size="24px" data-weight="regular">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor" viewBox="0 0 256 256">
+                                <path
+                                        d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <span class="truncate">Optimize Routes</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

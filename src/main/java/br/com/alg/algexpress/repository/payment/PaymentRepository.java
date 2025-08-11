@@ -2,6 +2,7 @@ package br.com.alg.algexpress.repository.payment;
 
 import br.com.alg.algexpress.domain.order.Order;
 import br.com.alg.algexpress.domain.payment.Payment;
+import br.com.alg.algexpress.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,6 +31,10 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Query("SELECT p FROM Payment p WHERE p.paymentDateTime BETWEEN :startDate AND :endDate")
     List<Payment> findPaymentsBetweenDates(@Param("startDate") LocalDateTime startDate, 
                                           @Param("endDate") LocalDateTime endDate);
+
+    @Query("SELECT p FROM Payment p WHERE p.paymentDateTime BETWEEN :startDate AND :endDate AND p.status = 'APPROVED'")
+    List<Payment> findPaymentsAppovedBetweenDates(@Param("startDate") LocalDateTime startDate,
+                                           @Param("endDate") LocalDateTime endDate);
     
     @Query("SELECT SUM(p.amount) FROM Payment p WHERE p.status = 'APPROVED' AND p.order.id = :orderId")
     Optional<BigDecimal> sumApprovedPaymentsByOrderId(@Param("orderId") Long orderId);
@@ -67,6 +72,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Query("SELECT p FROM Payment p WHERE p.paymentMethod = 'CASH' AND p.change > 0")
     List<Payment> findCashPaymentsWithChange();
     
-    @Query("SELECT p FROM Payment p WHERE DATE(p.paymentDateTime) = CURRENT_DATE AND p.status = 'APPROVED'")
+    @Query("SELECT p FROM Payment p WHERE p.paymentDateTime >= :startOfDay  AND p.status = 'APPROVED'")
     List<Payment> findTodaysApprovedPayments();
+
 }
