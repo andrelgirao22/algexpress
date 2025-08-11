@@ -61,6 +61,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT AVG(o.total) FROM Order o WHERE o.status = 'DELIVERED'")
     Optional<BigDecimal> findAverageOrderTotal();
     
-    @Query("SELECT o FROM Order o WHERE DATE(o.orderDateTime) = CURRENT_DATE ORDER BY o.orderDateTime DESC")
-    List<Order> findTodaysOrders();
+    @Query("SELECT o FROM Order o WHERE o.orderDateTime >= :startOfDay AND o.orderDateTime < :endOfDay ORDER BY o.orderDateTime DESC")
+    List<Order> findTodaysOrders(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
 }

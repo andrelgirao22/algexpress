@@ -43,8 +43,9 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
     @Query("SELECT COUNT(d) FROM Delivery d WHERE d.deliveryPerson.id = :deliveryPersonId AND d.status = 'DELIVERED'")
     Long countDeliveredByDeliveryPerson(@Param("deliveryPersonId") Long deliveryPersonId);
     
-    @Query("SELECT AVG(EXTRACT(EPOCH FROM (d.deliveryTime - d.departureTime))/60) FROM Delivery d " +
-           "WHERE d.departureTime IS NOT NULL AND d.deliveryTime IS NOT NULL AND d.status = 'DELIVERED'")
+    @Query(value = "SELECT AVG(EXTRACT(EPOCH FROM (delivery_time - departure_time))/60) FROM deliveries " +
+                   "WHERE departure_time IS NOT NULL AND delivery_time IS NOT NULL AND status = 'DELIVERED'", 
+           nativeQuery = true)
     Optional<Double> findAverageDeliveryTimeMinutes();
     
     @Query("SELECT d.deliveryPerson, COUNT(d) as deliveryCount FROM Delivery d " +
@@ -68,9 +69,11 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
     List<Delivery> findCancelledDeliveriesWithReason();
     
     @Query("SELECT COUNT(d) FROM Delivery d WHERE d.deliveryPerson.id = :deliveryPersonId " +
-           "AND DATE(d.departureTime) = CURRENT_DATE")
-    Long countTodaysDeliveriesByPerson(@Param("deliveryPersonId") Long deliveryPersonId);
+           "AND d.departureTime >= :startOfDay AND d.departureTime < :endOfDay")
+    Long countTodaysDeliveriesByPerson(@Param("deliveryPersonId") Long deliveryPersonId, 
+                                       @Param("startOfDay") LocalDateTime startOfDay, 
+                                       @Param("endOfDay") LocalDateTime endOfDay);
     
-    @Query("SELECT d FROM Delivery d WHERE DATE(d.departureTime) = CURRENT_DATE ORDER BY d.departureTime DESC")
-    List<Delivery> findTodaysDeliveries();
+    @Query("SELECT d FROM Delivery d WHERE d.departureTime >= :startOfDay AND d.departureTime < :endOfDay ORDER BY d.departureTime DESC")
+    List<Delivery> findTodaysDeliveries(@Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
 }
