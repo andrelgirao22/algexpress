@@ -47,4 +47,31 @@ public interface PizzaRepository extends JpaRepository<Pizza, Long> {
     Long countAvailablePizzasByCategory(@Param("category") Pizza.PizzaCategory category);
     
     Optional<Pizza> findByNameIgnoreCase(String name);
+    
+    // Additional methods used by MenuService
+    
+    List<Pizza> findByAvailable(Boolean available);
+    
+    @Query("SELECT p FROM Pizza p WHERE " +
+           "(:size = 'SMALL' AND p.priceSmall BETWEEN :minPrice AND :maxPrice) OR " +
+           "(:size = 'MEDIUM' AND p.priceMedium BETWEEN :minPrice AND :maxPrice) OR " +
+           "(:size = 'LARGE' AND p.priceLarge BETWEEN :minPrice AND :maxPrice) OR " +
+           "(:size = 'EXTRA_LARGE' AND p.priceExtraLarge BETWEEN :minPrice AND :maxPrice)")
+    List<Pizza> findByPriceBetween(@Param("minPrice") BigDecimal minPrice, 
+                                   @Param("maxPrice") BigDecimal maxPrice, 
+                                   @Param("size") Pizza.PizzaSize size);
+    
+    @Query("SELECT p FROM Pizza p LEFT JOIN OrderItem oi ON p.id = oi.pizza.id " +
+           "GROUP BY p.id ORDER BY COUNT(oi) DESC")
+    List<Pizza> findMostPopularPizzas();
+    
+    @Query("SELECT p FROM Pizza p WHERE p.category = 'VEGAN' AND p.available = true")
+    List<Pizza> findVegetarianPizzas();
+    
+    @Query("SELECT COUNT(p) FROM Pizza p WHERE p.available = :available")
+    Long countByAvailable(@Param("available") Boolean available);
+    
+    @Query("SELECT p.category, COUNT(p) FROM Pizza p WHERE p.available = true " +
+           "GROUP BY p.category ORDER BY COUNT(p) DESC")
+    List<Object[]> findPizzaStatisticsByCategory();
 }

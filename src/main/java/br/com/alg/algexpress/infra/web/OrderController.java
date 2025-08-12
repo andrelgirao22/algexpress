@@ -6,6 +6,8 @@ import br.com.alg.algexpress.domain.menu.Pizza;
 import br.com.alg.algexpress.domain.order.Order;
 import br.com.alg.algexpress.domain.order.OrderItem;
 // AddressService removido - addresses são gerenciados via CustomerService
+import br.com.alg.algexpress.dto.order.OrderDTO;
+import br.com.alg.algexpress.dto.order.OrderItemDTO;
 import br.com.alg.algexpress.infra.service.CustomerService;
 import br.com.alg.algexpress.infra.service.MenuService;
 import br.com.alg.algexpress.infra.service.OrderService;
@@ -39,184 +41,186 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
         List<Order> orders = orderService.findActiveOrders();
-        List<OrderResponseDTO> response = orders.stream()
-                .map(OrderResponseDTO::fromEntity)
+        List<OrderDTO> response = orders.stream()
+                .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long id) {
         return orderService.findById(id)
-                .map(order -> ResponseEntity.ok(OrderResponseDTO.fromEntity(order)))
+                .map(order -> ResponseEntity.ok(OrderDTO.fromEntity(order)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<List<OrderResponseDTO>> getOrdersByCustomer(@PathVariable Long customerId) {
+    public ResponseEntity<List<OrderDTO>> getOrdersByCustomer(@PathVariable Long customerId) {
         List<Order> orders = orderService.findByCustomerId(customerId);
-        List<OrderResponseDTO> response = orders.stream()
-                .map(OrderResponseDTO::fromEntity)
+        List<OrderDTO> response = orders.stream()
+                .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/customer/{customerId}/history")
-    public ResponseEntity<List<OrderResponseDTO>> getCustomerOrderHistory(@PathVariable Long customerId) {
+    public ResponseEntity<List<OrderDTO>> getCustomerOrderHistory(@PathVariable Long customerId) {
         List<Order> orders = orderService.findCustomerOrderHistory(customerId);
-        List<OrderResponseDTO> response = orders.stream()
-                .map(OrderResponseDTO::fromEntity)
+        List<OrderDTO> response = orders.stream()
+                .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<OrderResponseDTO>> getOrdersByStatus(@PathVariable Order.OrderStatus status) {
+    public ResponseEntity<List<OrderDTO>> getOrdersByStatus(@PathVariable Order.OrderStatus status) {
         List<Order> orders = orderService.findByStatus(status);
-        List<OrderResponseDTO> response = orders.stream()
-                .map(OrderResponseDTO::fromEntity)
+        List<OrderDTO> response = orders.stream()
+                .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/type/{type}")
-    public ResponseEntity<List<OrderResponseDTO>> getOrdersByType(@PathVariable Order.OrderType type) {
+    public ResponseEntity<List<OrderDTO>> getOrdersByType(@PathVariable Order.OrderType type) {
         List<Order> orders = orderService.findByType(type);
-        List<OrderResponseDTO> response = orders.stream()
-                .map(OrderResponseDTO::fromEntity)
+        List<OrderDTO> response = orders.stream()
+                .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/today")
-    public ResponseEntity<List<OrderResponseDTO>> getTodaysOrders() {
+    public ResponseEntity<List<OrderDTO>> getTodaysOrders() {
         List<Order> orders = orderService.findTodaysOrders();
-        List<OrderResponseDTO> response = orders.stream()
-                .map(OrderResponseDTO::fromEntity)
+        List<OrderDTO> response = orders.stream()
+                .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/active")
-    public ResponseEntity<List<OrderResponseDTO>> getActiveOrders() {
+    public ResponseEntity<List<OrderDTO>> getActiveOrders() {
         List<Order> orders = orderService.findActiveOrders();
-        List<OrderResponseDTO> response = orders.stream()
-                .map(OrderResponseDTO::fromEntity)
+        List<OrderDTO> response = orders.stream()
+                .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/delivery/active")
-    public ResponseEntity<List<OrderResponseDTO>> getActiveDeliveryOrders() {
+    public ResponseEntity<List<OrderDTO>> getActiveDeliveryOrders() {
         List<Order> orders = orderService.findActiveDeliveryOrders();
-        List<OrderResponseDTO> response = orders.stream()
-                .map(OrderResponseDTO::fromEntity)
+        List<OrderDTO> response = orders.stream()
+                .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/date-range")
-    public ResponseEntity<List<OrderResponseDTO>> getOrdersBetweenDates(
+    public ResponseEntity<List<OrderDTO>> getOrdersBetweenDates(
             @RequestParam LocalDateTime startDate,
             @RequestParam LocalDateTime endDate) {
         List<Order> orders = orderService.findOrdersBetweenDates(startDate, endDate);
-        List<OrderResponseDTO> response = orders.stream()
-                .map(OrderResponseDTO::fromEntity)
+        List<OrderDTO> response = orders.stream()
+                .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/total-range")
-    public ResponseEntity<List<OrderResponseDTO>> getOrdersByTotalRange(
+    public ResponseEntity<List<OrderDTO>> getOrdersByTotalRange(
             @RequestParam BigDecimal minTotal,
             @RequestParam BigDecimal maxTotal) {
         List<Order> orders = orderService.findByTotalBetween(minTotal, maxTotal);
-        List<OrderResponseDTO> response = orders.stream()
-                .map(OrderResponseDTO::fromEntity)
+        List<OrderDTO> response = orders.stream()
+                .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/customer/{customerId}/status/{status}")
-    public ResponseEntity<List<OrderResponseDTO>> getOrdersByCustomerAndStatus(
+    public ResponseEntity<List<OrderDTO>> getOrdersByCustomerAndStatus(
             @PathVariable Long customerId,
             @PathVariable Order.OrderStatus status) {
         List<Order> orders = orderService.findByCustomerIdAndStatus(customerId, status);
-        List<OrderResponseDTO> response = orders.stream()
-                .map(OrderResponseDTO::fromEntity)
+        List<OrderDTO> response = orders.stream()
+                .map(OrderDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> createOrder(@Valid @RequestBody OrderRequestDTO request) {
+    public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody OrderDTO request) {
         try {
-            Customer customer = customerService.findById(request.getCustomerId())
+            Customer customer = customerService.findById(request.customerId())
                     .orElseThrow(() -> new RuntimeException("Customer not found"));
 
             Order order = new Order();
             order.setCustomer(customer);
-            order.setType(request.getType());
-            order.setObservations(request.getObservations());
+            order.setType(request.type());
+            order.setObservations(request.observations());
 
-            if (request.getType() == Order.OrderType.DELIVERY) {
-                if (request.getAddressId() == null) {
+            if (request.type() == Order.OrderType.DELIVERY) {
+                if (request.addressId() == null) {
                     throw new RuntimeException("Address is required for delivery orders");
                 }
                 
-                Address address = addressService.findById(request.getAddressId())
+                Address address = customerService.findAddressById(request.addressId())
                         .orElseThrow(() -> new RuntimeException("Address not found"));
                 
-                if (!addressService.isAddressInDeliveryArea(request.getAddressId())) {
-                    throw new RuntimeException("Address is not in delivery area");
-                }
+                // TODO: Implement delivery area validation in CustomerService
+                // if (!customerService.isAddressInDeliveryArea(request.addressId())) {
+                //     throw new RuntimeException("Address is not in delivery area");
+                // }
                 
-                order.setAddress(address);
-                order.setDeliveryFee(addressService.calculateDeliveryFee(request.getAddressId()));
+                order.setDeliveryAddress(address);
+                // TODO: Implement delivery fee calculation in CustomerService
+                // order.setDeliveryFee(customerService.calculateDeliveryFee(request.addressId()));
             }
 
             List<OrderItem> orderItems = new ArrayList<>();
-            for (OrderItemRequestDTO itemRequest : request.getItems()) {
-                Pizza pizza = menuService.findPizzaById(itemRequest.getPizzaId())
+            for (OrderItemDTO itemRequest : request.items()) {
+                Pizza pizza = menuService.findPizzaById(itemRequest.pizzaId())
                         .orElseThrow(() -> new RuntimeException("Pizza not found"));
 
-                if (!pizza.getIsAvailable()) {
+                if (!pizza.getAvailable()) {
                     throw new RuntimeException("Pizza is not available: " + pizza.getName());
                 }
 
-                if (!menuService.validatePizzaCustomization(itemRequest.getPizzaId(), 
-                        itemRequest.getAdditionalIngredients(), itemRequest.getRemovedIngredients())) {
+                if (!menuService.validatePizzaCustomization(itemRequest.pizzaId(), 
+                        itemRequest.additionalIngredientIds(), itemRequest.removedIngredientIds())) {
                     throw new RuntimeException("Invalid pizza customization");
                 }
 
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrder(order);
                 orderItem.setPizza(pizza);
-                orderItem.setSize(OrderItem.PizzaSize.valueOf(itemRequest.getSize().name()));
-                orderItem.setQuantity(itemRequest.getQuantity());
-                orderItem.setObservations(itemRequest.getObservations());
+                orderItem.setSize(itemRequest.size());
+                orderItem.setQuantity(itemRequest.quantity());
+                orderItem.setObservations(itemRequest.observations());
 
                 BigDecimal unitPrice = menuService.calculateItemPrice(
-                    itemRequest.getPizzaId(),
-                    itemRequest.getSize(),
-                    itemRequest.getAdditionalIngredients(),
-                    itemRequest.getRemovedIngredients()
+                    itemRequest.pizzaId(),
+                    itemRequest.size(),
+                    itemRequest.additionalIngredientIds(),
+                    itemRequest.removedIngredientIds()
                 );
                 orderItem.setUnitPrice(unitPrice);
-                orderItem.setSubtotal(unitPrice.multiply(new BigDecimal(itemRequest.getQuantity())));
+                orderItem.setTotalPrice(unitPrice.multiply(new BigDecimal(itemRequest.quantity())));
 
                 orderItems.add(orderItem);
             }
 
-            order.setOrderItems(orderItems);
+            order.setItems(orderItems);
             
             Order savedOrder = orderService.save(order);
             orderService.calculateOrderTotal(savedOrder);
             Order finalOrder = orderService.save(savedOrder);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(OrderResponseDTO.fromEntity(finalOrder));
+            return ResponseEntity.status(HttpStatus.CREATED).body(OrderDTO.fromEntity(finalOrder));
 
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
@@ -224,50 +228,50 @@ public class OrderController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<OrderResponseDTO> updateOrderStatus(@PathVariable Long id, @RequestParam Order.OrderStatus status) {
+    public ResponseEntity<OrderDTO> updateOrderStatus(@PathVariable Long id, @RequestParam Order.OrderStatus status) {
         try {
             Order order = orderService.updateOrderStatus(id, status);
-            return ResponseEntity.ok(OrderResponseDTO.fromEntity(order));
+            return ResponseEntity.ok(OrderDTO.fromEntity(order));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PatchMapping("/{id}/confirm")
-    public ResponseEntity<OrderResponseDTO> confirmOrder(@PathVariable Long id) {
+    public ResponseEntity<OrderDTO> confirmOrder(@PathVariable Long id) {
         try {
             Order order = orderService.confirmOrder(id);
-            return ResponseEntity.ok(OrderResponseDTO.fromEntity(order));
+            return ResponseEntity.ok(OrderDTO.fromEntity(order));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PatchMapping("/{id}/cancel")
-    public ResponseEntity<OrderResponseDTO> cancelOrder(@PathVariable Long id) {
+    public ResponseEntity<OrderDTO> cancelOrder(@PathVariable Long id) {
         try {
             Order order = orderService.cancelOrder(id);
-            return ResponseEntity.ok(OrderResponseDTO.fromEntity(order));
+            return ResponseEntity.ok(OrderDTO.fromEntity(order));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PatchMapping("/{id}/ready")
-    public ResponseEntity<OrderResponseDTO> markOrderReady(@PathVariable Long id) {
+    public ResponseEntity<OrderDTO> markOrderReady(@PathVariable Long id) {
         try {
             Order order = orderService.markAsReady(id);
-            return ResponseEntity.ok(OrderResponseDTO.fromEntity(order));
+            return ResponseEntity.ok(OrderDTO.fromEntity(order));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PatchMapping("/{id}/delivered")
-    public ResponseEntity<OrderResponseDTO> markOrderDelivered(@PathVariable Long id) {
+    public ResponseEntity<OrderDTO> markOrderDelivered(@PathVariable Long id) {
         try {
             Order order = orderService.markAsDelivered(id);
-            return ResponseEntity.ok(OrderResponseDTO.fromEntity(order));
+            return ResponseEntity.ok(OrderDTO.fromEntity(order));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

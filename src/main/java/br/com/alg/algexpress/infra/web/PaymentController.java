@@ -49,11 +49,11 @@ public class PaymentController {
         @ApiResponse(responseCode = "200", description = "Pagamento encontrado com sucesso"),
         @ApiResponse(responseCode = "404", description = "Pagamento não encontrado")
     })
-    public ResponseEntity<PaymentResponseDTO> getPaymentById(
+    public ResponseEntity<PaymentDTO> getPaymentById(
             @Parameter(description = "ID do pagamento", required = true) 
             @PathVariable Long id) {
         return paymentService.findById(id)
-                .map(payment -> ResponseEntity.ok(PaymentResponseDTO.fromEntity(payment)))
+                .map(payment -> ResponseEntity.ok(PaymentDTO.fromEntity(payment)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -65,12 +65,12 @@ public class PaymentController {
         @ApiResponse(responseCode = "400", description = "Dados inválidos ou erro no processamento"),
         @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
     })
-    public ResponseEntity<PaymentResponseDTO> processPayment(
+    public ResponseEntity<PaymentDTO> processPayment(
             @Parameter(description = "Dados do pagamento", required = true) 
-            @Valid @RequestBody PaymentRequestDTO dto) {
+            @Valid @RequestBody PaymentDTO dto) {
         try {
             Payment payment = paymentService.processPayment(dto.orderId(), dto.paymentMethodType(), dto.amount(), dto.amountPaid());
-            return ResponseEntity.status(HttpStatus.CREATED).body(PaymentResponseDTO.fromEntity(payment));
+            return ResponseEntity.status(HttpStatus.CREATED).body(PaymentDTO.fromEntity(payment));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }
@@ -109,12 +109,12 @@ public class PaymentController {
         @ApiResponse(responseCode = "200", description = "Pagamento aprovado com sucesso"),
         @ApiResponse(responseCode = "404", description = "Pagamento não encontrado")
     })
-    public ResponseEntity<PaymentResponseDTO> approvePayment(
+    public ResponseEntity<PaymentDTO> approvePayment(
             @Parameter(description = "ID do pagamento", required = true) 
             @PathVariable Long id) {
         try {
             Payment payment = paymentService.approvePayment(id);
-            return ResponseEntity.ok(PaymentResponseDTO.fromEntity(payment));
+            return ResponseEntity.ok(PaymentDTO.fromEntity(payment));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
@@ -127,14 +127,14 @@ public class PaymentController {
         @ApiResponse(responseCode = "200", description = "Pagamento rejeitado com sucesso"),
         @ApiResponse(responseCode = "404", description = "Pagamento não encontrado")
     })
-    public ResponseEntity<PaymentResponseDTO> rejectPayment(
+    public ResponseEntity<PaymentDTO> rejectPayment(
             @Parameter(description = "ID do pagamento", required = true) 
             @PathVariable Long id, 
             @Parameter(description = "Motivo da rejeição") 
             @RequestParam(required = false) String reason) {
         try {
             Payment payment = paymentService.rejectPayment(id, reason);
-            return ResponseEntity.ok(PaymentResponseDTO.fromEntity(payment));
+            return ResponseEntity.ok(PaymentDTO.fromEntity(payment));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

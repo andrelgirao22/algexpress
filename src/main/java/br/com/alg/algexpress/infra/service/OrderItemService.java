@@ -76,7 +76,7 @@ public class OrderItemService {
 
     public OrderItem save(OrderItem orderItem) {
         // Calculate subtotal before saving
-        orderItem.setSubtotal(calculateItemSubtotal(orderItem));
+        orderItem.setTotalPrice(calculateItemSubtotal(orderItem));
         return orderItemRepository.save(orderItem);
     }
 
@@ -99,7 +99,7 @@ public class OrderItemService {
         
         orderItem.setSize(size);
         orderItem.setQuantity(quantity);
-        orderItem.setNotes(notes);
+        orderItem.setObservations(notes);
         
         // Calculate and set unit price
         BigDecimal unitPrice = menuService.calculateItemPrice(pizzaId, size, additionalIngredients, removedIngredients);
@@ -107,7 +107,7 @@ public class OrderItemService {
         
         // Calculate and set subtotal
         BigDecimal subtotal = unitPrice.multiply(new BigDecimal(quantity));
-        orderItem.setSubtotal(subtotal);
+        orderItem.setTotalPrice(subtotal);
         
         return orderItemRepository.save(orderItem);
     }
@@ -119,7 +119,7 @@ public class OrderItemService {
             orderItem.setQuantity(newQuantity);
             
             // Recalculate subtotal
-            orderItem.setSubtotal(orderItem.getUnitPrice().multiply(new BigDecimal(newQuantity)));
+            orderItem.setTotalPrice(orderItem.getUnitPrice().multiply(new BigDecimal(newQuantity)));
             
             return orderItemRepository.save(orderItem);
         }
@@ -133,7 +133,7 @@ public class OrderItemService {
             
             // Check if ingredient exists and is available
             Optional<Ingredient> ingredientOpt = menuService.findIngredientById(ingredientId);
-            if (ingredientOpt.isEmpty() || !ingredientOpt.get().getIsAvailable()) {
+            if (ingredientOpt.isEmpty() || !ingredientOpt.get().getAvailable()) {
                 throw new RuntimeException("Ingredient not available");
             }
             
@@ -200,7 +200,7 @@ public class OrderItemService {
         Optional<OrderItem> orderItemOpt = orderItemRepository.findById(orderItemId);
         if (orderItemOpt.isPresent()) {
             OrderItem orderItem = orderItemOpt.get();
-            orderItem.setNotes(notes);
+            orderItem.setObservations(notes);
             return orderItemRepository.save(orderItem);
         }
         throw new RuntimeException("Order item not found with id: " + orderItemId);
@@ -225,7 +225,7 @@ public class OrderItemService {
     public BigDecimal calculateOrderTotal(Long orderId) {
         List<OrderItem> orderItems = orderItemRepository.findByOrderId(orderId);
         return orderItems.stream()
-                .map(OrderItem::getSubtotal)
+                .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
@@ -259,8 +259,8 @@ public class OrderItemService {
                         .orElse(""));
             }
             
-            if (orderItem.getNotes() != null && !orderItem.getNotes().isEmpty()) {
-                description.append(" (").append(orderItem.getNotes()).append(")");
+            if (orderItem.getObservations() != null && !orderItem.getObservations().isEmpty()) {
+                description.append(" (").append(orderItem.getObservations()).append(")");
             }
             
             return description.toString();
@@ -285,7 +285,7 @@ public class OrderItemService {
         );
         
         orderItem.setUnitPrice(unitPrice);
-        orderItem.setSubtotal(unitPrice.multiply(new BigDecimal(orderItem.getQuantity())));
+        orderItem.setTotalPrice(unitPrice.multiply(new BigDecimal(orderItem.getQuantity())));
     }
 
     public void deleteOrderItem(Long orderItemId) {

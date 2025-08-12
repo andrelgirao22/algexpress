@@ -1,0 +1,496 @@
+{
+	"info": {
+		"_postman_id": "algexpress-api-collection",
+		"name": "AlgExpress API Collection",
+		"description": "Complete API collection for AlgExpress pizza delivery management system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "algexpress"
+	},
+	"item": [
+		{
+			"name": "1. Customers Management",
+			"description": "Customer registration, management and address handling",
+			"item": [
+				{
+					"name": "Get All Customers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/clientes",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "clientes"]
+						}
+					}
+				},
+				{
+					"name": "Get Customer by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/clientes/{{customer_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "clientes", "{{customer_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Create Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@email.com\",\n  \"phone\": \"11999999999\",\n  \"cpf\": \"12345678901\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/clientes",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "clientes"]
+						}
+					}
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": {{customer_id}},\n  \"name\": \"João Silva Santos\",\n  \"email\": \"joao.santos@email.com\",\n  \"phone\": \"11888888888\",\n  \"cpf\": \"12345678901\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/clientes/{{customer_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "clientes", "{{customer_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Add Address to Customer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"street\": \"Rua das Flores\",\n  \"number\": \"123\",\n  \"complement\": \"Apto 45\",\n  \"neighborhood\": \"Centro\",\n  \"city\": \"São Paulo\",\n  \"state\": \"SP\",\n  \"zipCode\": \"01234567\",\n  \"type\": \"RESIDENTIAL\",\n  \"referencePoints\": \"Próximo ao mercado\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/enderecos/{{customer_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "enderecos", "{{customer_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Menu Management",
+			"description": "Pizza menu and ingredients management",
+			"item": [
+				{
+					"name": "Get All Pizzas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cardapio/pizzas",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "cardapio", "pizzas"]
+						}
+					}
+				},
+				{
+					"name": "Get Pizza by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cardapio/pizzas/{{pizza_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "cardapio", "pizzas", "{{pizza_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Get All Ingredients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/cardapio/ingredientes",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "cardapio", "ingredientes"]
+						}
+					}
+				},
+				{
+					"name": "Create Pizza",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Pizza Margherita\",\n  \"description\": \"Pizza clássica com molho de tomate, mussarela e manjericão\",\n  \"category\": \"TRADITIONAL\",\n  \"priceSmall\": 25.90,\n  \"priceMedium\": 35.90,\n  \"priceLarge\": 45.90,\n  \"priceExtraLarge\": 55.90,\n  \"preparationTimeMinutes\": 15,\n  \"available\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/cardapio/pizzas",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "cardapio", "pizzas"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Order Management",
+			"description": "Order creation, tracking and management",
+			"item": [
+				{
+					"name": "Get All Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pedidos",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pedidos"]
+						}
+					}
+				},
+				{
+					"name": "Get Order by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pedidos/{{order_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pedidos", "{{order_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customerId\": {{customer_id}},\n  \"type\": \"DELIVERY\",\n  \"addressId\": {{address_id}},\n  \"observations\": \"Sem cebola na pizza\",\n  \"items\": [\n    {\n      \"pizzaId\": {{pizza_id}},\n      \"size\": \"MEDIUM\",\n      \"quantity\": 1,\n      \"additionalIngredientIds\": [],\n      \"removedIngredientIds\": [],\n      \"observations\": \"Bem assada\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/pedidos",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pedidos"]
+						}
+					}
+				},
+				{
+					"name": "Update Order Status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pedidos/{{order_id}}/status?status=CONFIRMED",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pedidos", "{{order_id}}", "status"],
+							"query": [
+								{
+									"key": "status",
+									"value": "CONFIRMED"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Confirm Order",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pedidos/{{order_id}}/confirm",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pedidos", "{{order_id}}", "confirm"]
+						}
+					}
+				},
+				{
+					"name": "Cancel Order",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pedidos/{{order_id}}/cancel",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pedidos", "{{order_id}}", "cancel"]
+						}
+					}
+				},
+				{
+					"name": "Mark Order as Ready",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pedidos/{{order_id}}/ready",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pedidos", "{{order_id}}", "ready"]
+						}
+					}
+				},
+				{
+					"name": "Mark Order as Delivered",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pedidos/{{order_id}}/delivered",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pedidos", "{{order_id}}", "delivered"]
+						}
+					}
+				},
+				{
+					"name": "Get Orders by Customer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pedidos/customer/{{customer_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pedidos", "customer", "{{customer_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Get Today's Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pedidos/today",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pedidos", "today"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Payment Management",
+			"description": "Payment processing and management",
+			"item": [
+				{
+					"name": "Get Payments by Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pagamentos/order/{{order_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pagamentos", "order", "{{order_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Get Payment by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pagamentos/{{payment_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pagamentos", "{{payment_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Process Payment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"orderId\": {{order_id}},\n  \"paymentMethodType\": \"CREDIT_CARD\",\n  \"amount\": 45.90,\n  \"amountPaid\": 45.90\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/pagamentos",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pagamentos"]
+						}
+					}
+				},
+				{
+					"name": "Approve Payment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pagamentos/{{payment_id}}/approve",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pagamentos", "{{payment_id}}", "approve"]
+						}
+					}
+				},
+				{
+					"name": "Get Pending Payments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pagamentos/pending",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pagamentos", "pending"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Delivery Management",
+			"description": "Delivery tracking and management",
+			"item": [
+				{
+					"name": "Get All Deliveries",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/entregas",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "entregas"]
+						}
+					}
+				},
+				{
+					"name": "Get Delivery by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/entregas/{{delivery_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "entregas", "{{delivery_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Create Delivery",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"orderId\": {{order_id}},\n  \"deliveryPersonId\": {{delivery_person_id}}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/entregas",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "entregas"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "customer_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "order_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "pizza_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "address_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "payment_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "delivery_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "delivery_person_id",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}

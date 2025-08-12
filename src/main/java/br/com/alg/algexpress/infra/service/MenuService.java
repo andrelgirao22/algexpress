@@ -37,7 +37,7 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public List<Pizza> findAvailablePizzas() {
-        return pizzaRepository.findByIsAvailable(true);
+        return pizzaRepository.findByAvailable(true);
     }
 
     @Transactional(readOnly = true)
@@ -78,7 +78,7 @@ public class MenuService {
         Optional<Pizza> pizzaOpt = pizzaRepository.findById(pizzaId);
         if (pizzaOpt.isPresent()) {
             Pizza pizza = pizzaOpt.get();
-            pizza.setIsAvailable(isAvailable);
+            pizza.setAvailable(isAvailable);
             return pizzaRepository.save(pizza);
         }
         throw new RuntimeException("Pizza not found with id: " + pizzaId);
@@ -92,7 +92,7 @@ public class MenuService {
                 case SMALL -> pizza.setPriceSmall(newPrice);
                 case MEDIUM -> pizza.setPriceMedium(newPrice);
                 case LARGE -> pizza.setPriceLarge(newPrice);
-                case FAMILY -> pizza.setPriceFamily(newPrice);
+                case EXTRA_LARGE -> pizza.setPriceExtraLarge(newPrice);
             }
             return pizzaRepository.save(pizza);
         }
@@ -108,7 +108,7 @@ public class MenuService {
                 case SMALL -> pizza.getPriceSmall();
                 case MEDIUM -> pizza.getPriceMedium();
                 case LARGE -> pizza.getPriceLarge();
-                case FAMILY -> pizza.getPriceFamily();
+                case EXTRA_LARGE -> pizza.getPriceExtraLarge();
             };
         }
         throw new RuntimeException("Pizza not found with id: " + pizzaId);
@@ -132,7 +132,7 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public List<Ingredient> findAvailableIngredients() {
-        return ingredientRepository.findByIsAvailable(true);
+        return ingredientRepository.findByAvailable(true);
     }
 
     @Transactional(readOnly = true)
@@ -147,7 +147,9 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public List<Ingredient> findVegetarianIngredients() {
-        return ingredientRepository.findByIsVegetarian(true);
+        // Note: vegetarian field doesn't exist in Ingredient entity
+        // Would need to be implemented based on category or other criteria
+        return ingredientRepository.findByCategory(Ingredient.IngredientCategory.VEGETABLE);
     }
 
     @Transactional(readOnly = true)
@@ -168,7 +170,7 @@ public class MenuService {
         Optional<Ingredient> ingredientOpt = ingredientRepository.findById(ingredientId);
         if (ingredientOpt.isPresent()) {
             Ingredient ingredient = ingredientOpt.get();
-            ingredient.setIsAvailable(isAvailable);
+            ingredient.setAvailable(isAvailable);
             return ingredientRepository.save(ingredient);
         }
         throw new RuntimeException("Ingredient not found with id: " + ingredientId);
@@ -193,7 +195,7 @@ public class MenuService {
     @Transactional(readOnly = true)
     public List<Pizza> searchMenu(String searchTerm, Pizza.PizzaCategory category, 
                                   BigDecimal maxPrice, Pizza.PizzaSize size, boolean vegetarianOnly) {
-        List<Pizza> pizzas = pizzaRepository.findByIsAvailable(true);
+        List<Pizza> pizzas = pizzaRepository.findByAvailable(true);
         
         return pizzas.stream()
                 .filter(pizza -> searchTerm == null || 
@@ -201,7 +203,7 @@ public class MenuService {
                         pizza.getDescription().toLowerCase().contains(searchTerm.toLowerCase()))
                 .filter(pizza -> category == null || pizza.getCategory() == category)
                 .filter(pizza -> maxPrice == null || getPizzaPrice(pizza.getId(), size).compareTo(maxPrice) <= 0)
-                .filter(pizza -> !vegetarianOnly || pizza.getIsVegetarian())
+                .filter(pizza -> !vegetarianOnly || pizza.getCategory() == Pizza.PizzaCategory.VEGAN)
                 .toList();
     }
 
@@ -230,7 +232,7 @@ public class MenuService {
                                              List<Long> removedIngredients) {
         // Check if pizza exists and is available
         Optional<Pizza> pizzaOpt = pizzaRepository.findById(pizzaId);
-        if (pizzaOpt.isEmpty() || !pizzaOpt.get().getIsAvailable()) {
+        if (pizzaOpt.isEmpty() || !pizzaOpt.get().getAvailable()) {
             return false;
         }
         
@@ -238,7 +240,7 @@ public class MenuService {
         if (additionalIngredients != null) {
             for (Long ingredientId : additionalIngredients) {
                 Optional<Ingredient> ingredientOpt = ingredientRepository.findById(ingredientId);
-                if (ingredientOpt.isEmpty() || !ingredientOpt.get().getIsAvailable()) {
+                if (ingredientOpt.isEmpty() || !ingredientOpt.get().getAvailable()) {
                     return false;
                 }
             }
@@ -258,12 +260,12 @@ public class MenuService {
 
     @Transactional(readOnly = true)
     public Long countAvailablePizzas() {
-        return pizzaRepository.countByIsAvailable(true);
+        return pizzaRepository.countByAvailable(true);
     }
 
     @Transactional(readOnly = true)
     public Long countAvailableIngredients() {
-        return ingredientRepository.countByIsAvailable(true);
+        return ingredientRepository.countByAvailable(true);
     }
 
     @Transactional(readOnly = true)

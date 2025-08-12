@@ -2,6 +2,7 @@ package br.com.alg.algexpress.infra.service;
 
 import br.com.alg.algexpress.domain.customer.Customer;
 import br.com.alg.algexpress.domain.order.Order;
+import br.com.alg.algexpress.domain.order.OrderItem;
 import br.com.alg.algexpress.infra.repository.order.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,7 +89,7 @@ public class OrderService {
             order.setStatus(newStatus);
             
             if (newStatus == Order.OrderStatus.CONFIRMED) {
-                order.setConfirmationTime(LocalDateTime.now());
+                order.setEstimatedDateTime(LocalDateTime.now().plusMinutes(30));
             }
             
             return orderRepository.save(order);
@@ -145,9 +146,9 @@ public class OrderService {
     public BigDecimal calculateOrderTotal(Order order) {
         BigDecimal total = BigDecimal.ZERO;
         
-        if (order.getOrderItems() != null) {
-            total = order.getOrderItems().stream()
-                    .map(item -> item.getSubtotal())
+        if (order.getItems() != null) {
+            total = order.getItems().stream()
+                    .map(OrderItem::getTotalPrice)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
         }
         

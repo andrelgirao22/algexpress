@@ -58,4 +58,26 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     Optional<Long> countPizzaSoldInPeriod(@Param("pizzaId") Long pizzaId, 
                                          @Param("startDate") LocalDateTime startDate, 
                                          @Param("endDate") LocalDateTime endDate);
+    
+    // Additional methods used by OrderItemService
+    
+    List<OrderItem> findByPizzaId(Long pizzaId);
+    
+    @Query("SELECT oi.pizza, SUM(oi.quantity) as totalOrdered FROM OrderItem oi " +
+           "GROUP BY oi.pizza ORDER BY totalOrdered DESC")
+    List<Object[]> findMostOrderedPizzas();
+    
+    @Query("SELECT oi.size, COUNT(oi) as sizeCount FROM OrderItem oi " +
+           "GROUP BY oi.size ORDER BY sizeCount DESC")
+    List<Object[]> findMostOrderedSizes();
+    
+    @Query("SELECT ai, COUNT(oi) as usageCount FROM OrderItem oi " +
+           "JOIN oi.additionalIngredients ai " +
+           "GROUP BY ai ORDER BY usageCount DESC")
+    List<Object[]> findMostRequestedAdditionalIngredients();
+    
+    @Query("SELECT ri, COUNT(oi) as removalCount FROM OrderItem oi " +
+           "JOIN oi.removedIngredients ri " +
+           "GROUP BY ri ORDER BY removalCount DESC")
+    List<Object[]> findMostRemovedIngredients();
 }

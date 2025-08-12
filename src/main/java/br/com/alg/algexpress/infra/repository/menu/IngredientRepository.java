@@ -46,4 +46,15 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
     List<Ingredient.IngredientCategory> findAvailableCategories();
     
     Optional<Ingredient> findByNameIgnoreCase(String name);
+    
+    // Additional methods used by MenuService
+    
+    List<Ingredient> findByAvailable(Boolean available);
+    
+    @Query("SELECT i FROM Ingredient i LEFT JOIN OrderItem oi ON i MEMBER OF oi.additionalIngredients " +
+           "GROUP BY i.id ORDER BY COUNT(oi) DESC")
+    List<Ingredient> findMostUsedIngredients();
+    
+    @Query("SELECT COUNT(i) FROM Ingredient i WHERE i.available = :available")
+    Long countByAvailable(@Param("available") Boolean available);
 }

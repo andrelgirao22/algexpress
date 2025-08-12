@@ -198,6 +198,23 @@ public class CustomerService {
     
     // ===== ADDRESS MANAGEMENT METHODS =====
     
+    @Transactional(readOnly = true)
+    public Optional<Address> findAddressById(Long addressId) {
+        List<Customer> customers = customerRepository.findAll();
+        
+        for (Customer customer : customers) {
+            if (customer.getAddresses() != null) {
+                for (Address address : customer.getAddresses()) {
+                    if (address.getId().equals(addressId)) {
+                        return Optional.of(address);
+                    }
+                }
+            }
+        }
+        
+        return Optional.empty();
+    }
+    
     public Address addAddressToCustomer(Long customerId, AddressDTO addressDTO) {
         Optional<Customer> customerOpt = customerRepository.findById(customerId);
         if (customerOpt.isPresent()) {

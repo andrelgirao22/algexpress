@@ -17,6 +17,8 @@ public interface DeliveryPersonRepository extends JpaRepository<DeliveryPerson, 
     
     List<DeliveryPerson> findByAvailableTrue();
     
+    List<DeliveryPerson> findByAvailable(Boolean available);
+    
     List<DeliveryPerson> findByVehicleType(DeliveryPerson.VehicleType vehicleType);
     
     Optional<DeliveryPerson> findByDocument(String document);
@@ -34,6 +36,9 @@ public interface DeliveryPersonRepository extends JpaRepository<DeliveryPerson, 
     
     @Query("SELECT COUNT(dp) FROM DeliveryPerson dp WHERE dp.status = :status")
     Long countByStatus(@Param("status") DeliveryPerson.DeliveryPersonStatus status);
+    
+    @Query("SELECT COUNT(dp) FROM DeliveryPerson dp WHERE dp.vehicleType = :vehicleType")
+    Long countByVehicleType(@Param("vehicleType") DeliveryPerson.VehicleType vehicleType);
     
     @Query("SELECT COUNT(dp) FROM DeliveryPerson dp WHERE dp.status = 'ACTIVE' AND dp.available = true")
     Long countAvailable();
