@@ -73,7 +73,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Query("SELECT p FROM Payment p WHERE p.paymentMethod.type = 'CASH' AND p.change.amount > 0")
     List<Payment> findCashPaymentsWithChange();
     
-    @Query("SELECT p FROM Payment p WHERE p.paymentDateTime >= :startOfDay  AND p.status = 'APPROVED'")
-    List<Payment> findTodaysApprovedPayments();
+    @Query("SELECT p FROM Payment p WHERE p.paymentDateTime >= :startOfDay AND p.status = 'APPROVED'")
+    List<Payment> findTodaysApprovedPayments(@Param("startOfDay") LocalDateTime startOfDay);
 
 }

@@ -60,21 +60,11 @@ public class DeliveryPersonService {
         return deliveryPersonRepository.findByNameContaining(name);
     }
 
-    @Transactional(readOnly = true)
-    public List<Object[]> findDeliveryPersonPerformanceStats() {
-        return deliveryPersonRepository.findDeliveryPersonPerformanceStats();
-    }
-
-    @Transactional(readOnly = true)
-    public List<Object[]> findTopPerformersLastMonth() {
-        return deliveryPersonRepository.findTopPerformersLastMonth();
-    }
-
     public DeliveryPerson save(DeliveryPerson deliveryPerson) {
         if (deliveryPerson.getId() == null) {
-            deliveryPerson.setHireDate(LocalDateTime.now());
-            deliveryPerson.setStatus(DeliveryPerson.DeliveryPersonStatus.OFF_DUTY);
-            deliveryPerson.setTotalDeliveries(0);
+            deliveryPerson.setShiftStart(LocalDateTime.now());
+            deliveryPerson.setStatus(DeliveryPerson.DeliveryPersonStatus.ON_DELIVERY);
+            //deliveryPerson.setTotalDeliveries(0);
         }
         return deliveryPersonRepository.save(deliveryPerson);
     }

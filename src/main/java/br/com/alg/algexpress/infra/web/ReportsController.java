@@ -5,6 +5,7 @@ import br.com.alg.algexpress.infra.service.MenuService;
 import br.com.alg.algexpress.infra.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/relatorios")
 @CrossOrigin(origins = "*")
+@Tag(name = "Relatórios", description = "API para geração de relatórios e estatísticas")
 public class ReportsController {
 
     private final CustomerService customerService;

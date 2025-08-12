@@ -121,7 +121,7 @@ public class Order {
     public BigDecimal getTotalPaidAmount() {
         return payments != null ? payments.stream()
             .filter(payment -> payment.getStatus() == Payment.PaymentStatus.APPROVED)
-            .map(Payment::getAmount)
+            .map(payment -> payment.getAmount() != null ? payment.getAmount().getAmount() : BigDecimal.ZERO)
             .reduce(BigDecimal.ZERO, BigDecimal::add) : BigDecimal.ZERO;
     }
     

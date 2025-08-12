@@ -17,14 +17,20 @@ public record DeliveryPersonDTO(
     @Size(max = 15, message = "Phone must not exceed 15 characters")
     String phone,
     
-    @Size(max = 20, message = "License plate must not exceed 20 characters")
-    String vehicleLicensePlate,
+    @Size(max = 100, message = "Email must not exceed 100 characters")
+    String email,
     
-    @Size(max = 50, message = "Vehicle model must not exceed 50 characters")
-    String vehicleModel,
+    @Size(max = 20, message = "Document must not exceed 20 characters")
+    String document,
     
     DeliveryPerson.DeliveryPersonStatus status,
-    Boolean isAvailable
+    
+    DeliveryPerson.VehicleType vehicleType,
+    
+    @Size(max = 10, message = "Vehicle plate must not exceed 10 characters")
+    String vehiclePlate,
+    
+    Boolean available
 ) {
 
     
@@ -33,10 +39,12 @@ public record DeliveryPersonDTO(
             deliveryPerson.getId(),
             deliveryPerson.getName(),
             deliveryPerson.getPhone(),
-            deliveryPerson.getVehicleLicensePlate(),
-            deliveryPerson.getVehicleModel(),
+            deliveryPerson.getEmail(),
+            deliveryPerson.getDocument(),
             deliveryPerson.getStatus(),
-            deliveryPerson.getIsAvailable()
+            deliveryPerson.getVehicleType(),
+            deliveryPerson.getVehiclePlate(),
+            deliveryPerson.getAvailable()
         );
     }
     
@@ -45,10 +53,12 @@ public record DeliveryPersonDTO(
         deliveryPerson.setId(this.id);
         deliveryPerson.setName(this.name);
         deliveryPerson.setPhone(this.phone);
-        deliveryPerson.setVehicleLicensePlate(this.vehicleLicensePlate);
-        deliveryPerson.setVehicleModel(this.vehicleModel);
+        deliveryPerson.setEmail(this.email);
+        deliveryPerson.setDocument(this.document);
         deliveryPerson.setStatus(this.status);
-        deliveryPerson.setIsAvailable(this.isAvailable);
+        deliveryPerson.setVehicleType(this.vehicleType);
+        deliveryPerson.setVehiclePlate(this.vehiclePlate);
+        deliveryPerson.setAvailable(this.available);
         return deliveryPerson;
     }
 }

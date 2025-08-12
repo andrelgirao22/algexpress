@@ -5,13 +5,11 @@ import br.com.alg.algexpress.domain.customer.Customer;
 import br.com.alg.algexpress.domain.menu.Pizza;
 import br.com.alg.algexpress.domain.order.Order;
 import br.com.alg.algexpress.domain.order.OrderItem;
-import br.com.alg.algexpress.dto.order.OrderItemRequestDTO;
-import br.com.alg.algexpress.dto.order.OrderRequestDTO;
-import br.com.alg.algexpress.dto.order.OrderResponseDTO;
 // AddressService removido - addresses são gerenciados via CustomerService
 import br.com.alg.algexpress.infra.service.CustomerService;
 import br.com.alg.algexpress.infra.service.MenuService;
 import br.com.alg.algexpress.infra.service.OrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/pedidos")
 @CrossOrigin(origins = "*")
+@Tag(name = "Pedidos", description = "API para gerenciamento de pedidos de pizzas")
 public class OrderController {
 
     private final OrderService orderService;

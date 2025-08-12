@@ -28,6 +28,10 @@ public record CustomerDTO(
     @Size(max = 15, message = "Phone must not exceed 15 characters")
     String phone,
     
+    @Pattern(regexp = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$", message = "CPF format should be xxx.xxx.xxx-xx")
+    @Size(max = 14, message = "CPF must not exceed 14 characters")
+    String cpf,
+    
     Integer loyaltyPoints,
     Customer.CustomerStatus status,
     LocalDateTime registrationDate,
@@ -47,6 +51,7 @@ public record CustomerDTO(
             customer.getName(),
             customer.getEmail(),
             customer.getPhone(),
+            customer.getCpf(),
             customer.getLoyaltyPoints(),
             customer.getStatus(),
             customer.getRegistrationDate(),
@@ -60,6 +65,7 @@ public record CustomerDTO(
             customer.getName(),
             customer.getEmail(),
             customer.getPhone(),
+            customer.getCpf(),
             customer.getLoyaltyPoints(),
             customer.getStatus(),
             customer.getRegistrationDate(),
@@ -73,6 +79,7 @@ public record CustomerDTO(
         customer.setName(this.name);
         customer.setEmail(this.email);
         customer.setPhone(this.phone);
+        customer.setCpf(this.cpf);
         customer.setLoyaltyPoints(this.loyaltyPoints);
         customer.setStatus(this.status);
         customer.setRegistrationDate(this.registrationDate);
@@ -84,6 +91,7 @@ public record CustomerDTO(
         customer.setName(this.name);
         customer.setEmail(this.email);
         customer.setPhone(this.phone);
+        customer.setCpf(this.cpf);
         return customer;
     }
 }

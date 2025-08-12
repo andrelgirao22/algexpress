@@ -2,7 +2,10 @@ package br.com.alg.algexpress.infra.service;
 
 import br.com.alg.algexpress.domain.order.Order;
 import br.com.alg.algexpress.domain.payment.Payment;
+import br.com.alg.algexpress.domain.valueObjects.Money;
+import br.com.alg.algexpress.domain.valueObjects.PaymentMethod;
 import br.com.alg.algexpress.infra.repository.payment.PaymentRepository;
+import br.com.alg.algexpress.infra.repository.order.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,15 +20,16 @@ import java.util.Optional;
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
+    private final OrderRepository orderRepository;
 
-    public PaymentService(PaymentRepository paymentRepository) {
+    public PaymentService(PaymentRepository paymentRepository, OrderRepository orderRepository) {
         this.paymentRepository = paymentRepository;
+        this.orderRepository = orderRepository;
     }
 
     public List<Payment> findTodaysApprovedPayments() {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = LocalDate.now().plusDays(1).atStartOfDay();
-        return paymentRepository.findPaymentsAppovedBetweenDates(startOfDay, endOfDay);
+        return paymentRepository.findTodaysApprovedPayments(startOfDay);
     }
 
     @Transactional(readOnly = true)
@@ -44,8 +48,8 @@ public class PaymentService {
     }
 
     @Transactional(readOnly = true)
-    public List<Payment> findByMethod(Payment.PaymentMethod method) {
-        return paymentRepository.findByMethod(method);
+    public List<Payment> findByPaymentMethodType(PaymentMethod.PaymentType paymentMethodType) {
+        return paymentRepository.findByPaymentMethodType(paymentMethodType);
     }
 
     @Transactional(readOnly = true)
@@ -72,26 +76,50 @@ public class PaymentService {
     }
 
     public Payment processPayment(Payment payment) {
+        if (!payment.canBeProcessed()) {
+            throw new IllegalArgumentException("Payment cannot be processed");
+        }
+        
         payment.setPaymentDateTime(LocalDateTime.now());
         
         // Basic payment processing logic - in real world, this would integrate with payment gateway
-        switch (payment.getMethod()) {
-            case CASH:
-                payment.setStatus(Payment.PaymentStatus.APPROVED);
-                break;
-            case CREDIT_CARD:
-            case DEBIT_CARD:
-                // Simulate card processing
-                payment.setStatus(Payment.PaymentStatus.APPROVED);
-                break;
-            case PIX:
-                payment.setStatus(Payment.PaymentStatus.APPROVED);
-                break;
-            default:
-                payment.setStatus(Payment.PaymentStatus.REJECTED);
+        if (payment.getPaymentMethod() != null) {
+            switch (payment.getPaymentMethod().getType()) {
+                case CASH:
+                    payment.setStatus(Payment.PaymentStatus.APPROVED);
+                    break;
+                case CREDIT_CARD:
+                case DEBIT_CARD:
+                    // Simulate card processing
+                    payment.setStatus(Payment.PaymentStatus.APPROVED);
+                    break;
+                case PIX:
+                    payment.setStatus(Payment.PaymentStatus.APPROVED);
+                    break;
+                default:
+                    payment.setStatus(Payment.PaymentStatus.REJECTED);
+            }
+        } else {
+            payment.setStatus(Payment.PaymentStatus.REJECTED);
         }
         
         return paymentRepository.save(payment);
+    }
+
+    public Payment processPayment(Long orderId, PaymentMethod.PaymentType paymentMethodType, BigDecimal amount, BigDecimal amountPaid) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + orderId));
+        
+        Payment payment = new Payment();
+        payment.setOrder(order);
+        payment.setPaymentMethod(new PaymentMethod(paymentMethodType));
+        payment.setAmount(Money.of(amount));
+        
+        if (amountPaid != null) {
+            payment.setAmountPaid(Money.of(amountPaid));
+        }
+        
+        return processPayment(payment);
     }
 
     public Payment approvePayment(Long paymentId) {
@@ -127,11 +155,8 @@ public class PaymentService {
 
     @Transactional(readOnly = true)
     public BigDecimal calculateOrderTotal(Long orderId) {
-        List<Payment> payments = paymentRepository.findByOrderId(orderId);
-        return payments.stream()
-                .filter(p -> p.getStatus() == Payment.PaymentStatus.APPROVED)
-                .map(Payment::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        Optional<BigDecimal> total = paymentRepository.sumApprovedPaymentsByOrderId(orderId);
+        return total.orElse(BigDecimal.ZERO);
     }
 
     @Transactional(readOnly = true)
@@ -152,13 +177,14 @@ public class PaymentService {
     }
 
     @Transactional(readOnly = true)
-    public Long countByMethod(Payment.PaymentMethod method) {
-        return paymentRepository.countByMethod(method);
+    public Long countByPaymentMethodType(PaymentMethod.PaymentType paymentMethodType) {
+        List<Payment> payments = paymentRepository.findByPaymentMethodType(paymentMethodType);
+        return (long) payments.size();
     }
 
     @Transactional(readOnly = true)
     public Optional<BigDecimal> getTotalRevenueBetweenDates(LocalDateTime startDate, LocalDateTime endDate) {
-        return paymentRepository.sumApprovedAmountsByDateRange(startDate, endDate);
+        return paymentRepository.sumApprovedPaymentsByDateRange(startDate, endDate);
     }
 
     @Transactional(readOnly = true)
@@ -167,8 +193,8 @@ public class PaymentService {
     }
 
     @Transactional(readOnly = true)
-    public List<Object[]> getPaymentMethodStatistics(LocalDateTime startDate, LocalDateTime endDate) {
-        return paymentRepository.findPaymentMethodStatistics(startDate, endDate);
+    public List<Object[]> getPaymentMethodStatistics() {
+        return paymentRepository.findPaymentMethodStatistics();
     }
 
     @Transactional(readOnly = true)

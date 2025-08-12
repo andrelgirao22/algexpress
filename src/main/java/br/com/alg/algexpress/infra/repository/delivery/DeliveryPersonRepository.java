@@ -63,4 +63,6 @@ public interface DeliveryPersonRepository extends JpaRepository<DeliveryPerson, 
     Long countDeliveriesByPersonAndDateRange(@Param("deliveryPersonId") Long deliveryPersonId,
                                             @Param("startDate") LocalDateTime startDate,
                                             @Param("endDate") LocalDateTime endDate);
+
+    List<DeliveryPerson> findByNameContaining(String name);
 }

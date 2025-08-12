@@ -6,7 +6,8 @@
       "Bash(do mv \"$f\" \"../infra/web/$f\")",
       "Bash(done)",
       "Bash(cp:*)",
-      "Bash(mvn compile:*)"
+      "Bash(mvn compile:*)",
+      "Bash(mvn clean:*)"
     ],
     "deny": []
   }

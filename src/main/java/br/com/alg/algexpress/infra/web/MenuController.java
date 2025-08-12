@@ -2,15 +2,14 @@ package br.com.alg.algexpress.infra.web;
 
 import br.com.alg.algexpress.domain.menu.Ingredient;
 import br.com.alg.algexpress.domain.menu.Pizza;
-import br.com.alg.algexpress.dto.menu.IngredientRequestDTO;
-import br.com.alg.algexpress.dto.menu.IngredientResponseDTO;
-import br.com.alg.algexpress.dto.menu.PizzaRequestDTO;
-import br.com.alg.algexpress.dto.menu.PizzaResponseDTO;
+import br.com.alg.algexpress.dto.menu.IngredientDTO;
+import br.com.alg.algexpress.dto.menu.PizzaDTO;
 import br.com.alg.algexpress.infra.service.MenuService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/cardapio")
 @CrossOrigin(origins = "*")
+@Tag(name = "Cardápio", description = "API para gerenciamento de pizzas e ingredientes")
 public class MenuController {
 
     private final MenuService menuService;
@@ -30,130 +30,130 @@ public class MenuController {
     // === PIZZA ENDPOINTS ===
 
     @GetMapping("/pizzas")
-    public ResponseEntity<List<PizzaResponseDTO>> getAllPizzas() {
+    public ResponseEntity<List<PizzaDTO>> getAllPizzas() {
         List<Pizza> pizzas = menuService.findAvailablePizzas();
-        List<PizzaResponseDTO> response = pizzas.stream()
-                .map(PizzaResponseDTO::fromEntity)
+        List<PizzaDTO> response = pizzas.stream()
+                .map(PizzaDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pizzas/{id}")
-    public ResponseEntity<PizzaResponseDTO> getPizzaById(@PathVariable Long id) {
+    public ResponseEntity<PizzaDTO> getPizzaById(@PathVariable Long id) {
         return menuService.findPizzaById(id)
-                .map(pizza -> ResponseEntity.ok(PizzaResponseDTO.fromEntity(pizza)))
+                .map(pizza -> ResponseEntity.ok(PizzaDTO.fromEntity(pizza)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/pizzas/category/{category}")
-    public ResponseEntity<List<PizzaResponseDTO>> getPizzasByCategory(@PathVariable Pizza.PizzaCategory category) {
+    public ResponseEntity<List<PizzaDTO>> getPizzasByCategory(@PathVariable Pizza.PizzaCategory category) {
         List<Pizza> pizzas = menuService.findPizzasByCategory(category);
-        List<PizzaResponseDTO> response = pizzas.stream()
-                .map(PizzaResponseDTO::fromEntity)
+        List<PizzaDTO> response = pizzas.stream()
+                .map(PizzaDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pizzas/search")
-    public ResponseEntity<List<PizzaResponseDTO>> searchPizzas(@RequestParam String name) {
+    public ResponseEntity<List<PizzaDTO>> searchPizzas(@RequestParam String name) {
         List<Pizza> pizzas = menuService.findPizzasByNameContaining(name);
-        List<PizzaResponseDTO> response = pizzas.stream()
-                .map(PizzaResponseDTO::fromEntity)
+        List<PizzaDTO> response = pizzas.stream()
+                .map(PizzaDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pizzas/popular")
-    public ResponseEntity<List<PizzaResponseDTO>> getMostPopularPizzas() {
+    public ResponseEntity<List<PizzaDTO>> getMostPopularPizzas() {
         List<Pizza> pizzas = menuService.findMostPopularPizzas();
-        List<PizzaResponseDTO> response = pizzas.stream()
-                .map(PizzaResponseDTO::fromEntity)
+        List<PizzaDTO> response = pizzas.stream()
+                .map(PizzaDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pizzas/vegetarian")
-    public ResponseEntity<List<PizzaResponseDTO>> getVegetarianPizzas() {
+    public ResponseEntity<List<PizzaDTO>> getVegetarianPizzas() {
         List<Pizza> pizzas = menuService.findVegetarianPizzas();
-        List<PizzaResponseDTO> response = pizzas.stream()
-                .map(PizzaResponseDTO::fromEntity)
+        List<PizzaDTO> response = pizzas.stream()
+                .map(PizzaDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pizzas/with-ingredient/{ingredientId}")
-    public ResponseEntity<List<PizzaResponseDTO>> getPizzasWithIngredient(@PathVariable Long ingredientId) {
+    public ResponseEntity<List<PizzaDTO>> getPizzasWithIngredient(@PathVariable Long ingredientId) {
         List<Pizza> pizzas = menuService.findPizzasWithIngredient(ingredientId);
-        List<PizzaResponseDTO> response = pizzas.stream()
-                .map(PizzaResponseDTO::fromEntity)
+        List<PizzaDTO> response = pizzas.stream()
+                .map(PizzaDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pizzas/price-range")
-    public ResponseEntity<List<PizzaResponseDTO>> getPizzasByPriceRange(
+    public ResponseEntity<List<PizzaDTO>> getPizzasByPriceRange(
             @RequestParam BigDecimal minPrice,
             @RequestParam BigDecimal maxPrice,
             @RequestParam Pizza.PizzaSize size) {
         List<Pizza> pizzas = menuService.findPizzasByPriceRange(minPrice, maxPrice, size);
-        List<PizzaResponseDTO> response = pizzas.stream()
-                .map(PizzaResponseDTO::fromEntity)
+        List<PizzaDTO> response = pizzas.stream()
+                .map(PizzaDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/pizzas")
-    public ResponseEntity<PizzaResponseDTO> createPizza(@Valid @RequestBody PizzaRequestDTO request) {
+    public ResponseEntity<PizzaDTO> createPizza(@Valid @RequestBody PizzaDTO request) {
         Pizza pizza = new Pizza();
-        pizza.setName(request.getName());
-        pizza.setDescription(request.getDescription());
-        pizza.setCategory(request.getCategory());
-        pizza.setPriceSmall(request.getPriceSmall());
-        pizza.setPriceMedium(request.getPriceMedium());
-        pizza.setPriceLarge(request.getPriceLarge());
-        pizza.setPriceFamily(request.getPriceFamily());
-        pizza.setIsVegetarian(request.getIsVegetarian());
-        pizza.setIsAvailable(request.getIsAvailable());
+        pizza.setName(request.name());
+        pizza.setDescription(request.description());
+        pizza.setCategory(request.category());
+        pizza.setPriceSmall(request.priceSmall());
+        pizza.setPriceMedium(request.priceMedium());
+        pizza.setPriceLarge(request.priceLarge());
+        pizza.setPriceExtraLarge(request.priceExtraLarge());
+        //pizza.setIsVegetarian(request.getIsVegetarian());
+        pizza.setAvailable(request.available());
 
         Pizza savedPizza = menuService.savePizza(pizza);
-        return ResponseEntity.status(HttpStatus.CREATED).body(PizzaResponseDTO.fromEntity(savedPizza));
+        return ResponseEntity.status(HttpStatus.CREATED).body(PizzaDTO.fromEntity(savedPizza));
     }
 
     @PutMapping("/pizzas/{id}")
-    public ResponseEntity<PizzaResponseDTO> updatePizza(@PathVariable Long id, @Valid @RequestBody PizzaRequestDTO request) {
+    public ResponseEntity<PizzaDTO> updatePizza(@PathVariable Long id, @Valid @RequestBody PizzaDTO request) {
         return menuService.findPizzaById(id)
                 .map(pizza -> {
-                    pizza.setName(request.getName());
-                    pizza.setDescription(request.getDescription());
-                    pizza.setCategory(request.getCategory());
-                    pizza.setPriceSmall(request.getPriceSmall());
-                    pizza.setPriceMedium(request.getPriceMedium());
-                    pizza.setPriceLarge(request.getPriceLarge());
-                    pizza.setPriceFamily(request.getPriceFamily());
-                    pizza.setIsVegetarian(request.getIsVegetarian());
-                    pizza.setIsAvailable(request.getIsAvailable());
+                    pizza.setName(request.name());
+                    pizza.setDescription(request.description());
+                    pizza.setCategory(request.category());
+                    pizza.setPriceSmall(request.priceSmall());
+                    pizza.setPriceMedium(request.priceMedium());
+                    pizza.setPriceLarge(request.priceLarge());
+                    pizza.setPriceExtraLarge(request.priceExtraLarge());
+                    //pizza.setIsVegetarian(request.a);
+                    pizza.setAvailable(request.available());
 
                     Pizza updatedPizza = menuService.savePizza(pizza);
-                    return ResponseEntity.ok(PizzaResponseDTO.fromEntity(updatedPizza));
+                    return ResponseEntity.ok(PizzaDTO.fromEntity(updatedPizza));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/pizzas/{id}/availability")
-    public ResponseEntity<PizzaResponseDTO> updatePizzaAvailability(@PathVariable Long id, @RequestParam boolean isAvailable) {
+    public ResponseEntity<PizzaDTO> updatePizzaAvailability(@PathVariable Long id, @RequestParam boolean isAvailable) {
         try {
             Pizza pizza = menuService.updatePizzaAvailability(id, isAvailable);
-            return ResponseEntity.ok(PizzaResponseDTO.fromEntity(pizza));
+            return ResponseEntity.ok(PizzaDTO.fromEntity(pizza));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PatchMapping("/pizzas/{id}/price")
-    public ResponseEntity<PizzaResponseDTO> updatePizzaPrice(@PathVariable Long id, @RequestParam Pizza.PizzaSize size, @RequestParam BigDecimal newPrice) {
+    public ResponseEntity<PizzaDTO> updatePizzaPrice(@PathVariable Long id, @RequestParam Pizza.PizzaSize size, @RequestParam BigDecimal newPrice) {
         try {
             Pizza pizza = menuService.updatePizzaPrice(id, size, newPrice);
-            return ResponseEntity.ok(PizzaResponseDTO.fromEntity(pizza));
+            return ResponseEntity.ok(PizzaDTO.fromEntity(pizza));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
@@ -181,114 +181,114 @@ public class MenuController {
     // === INGREDIENT ENDPOINTS ===
 
     @GetMapping("/ingredientes")
-    public ResponseEntity<List<IngredientResponseDTO>> getAllIngredients() {
+    public ResponseEntity<List<IngredientDTO>> getAllIngredients() {
         List<Ingredient> ingredients = menuService.findAvailableIngredients();
-        List<IngredientResponseDTO> response = ingredients.stream()
-                .map(IngredientResponseDTO::fromEntity)
+        List<IngredientDTO> response = ingredients.stream()
+                .map(IngredientDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/ingredientes/{id}")
-    public ResponseEntity<IngredientResponseDTO> getIngredientById(@PathVariable Long id) {
+    public ResponseEntity<IngredientDTO> getIngredientById(@PathVariable Long id) {
         return menuService.findIngredientById(id)
-                .map(ingredient -> ResponseEntity.ok(IngredientResponseDTO.fromEntity(ingredient)))
+                .map(ingredient -> ResponseEntity.ok(IngredientDTO.fromEntity(ingredient)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/ingredientes/category/{category}")
-    public ResponseEntity<List<IngredientResponseDTO>> getIngredientsByCategory(@PathVariable Ingredient.IngredientCategory category) {
+    public ResponseEntity<List<IngredientDTO>> getIngredientsByCategory(@PathVariable Ingredient.IngredientCategory category) {
         List<Ingredient> ingredients = menuService.findIngredientsByCategory(category);
-        List<IngredientResponseDTO> response = ingredients.stream()
-                .map(IngredientResponseDTO::fromEntity)
+        List<IngredientDTO> response = ingredients.stream()
+                .map(IngredientDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/ingredientes/search")
-    public ResponseEntity<List<IngredientResponseDTO>> searchIngredients(@RequestParam String name) {
+    public ResponseEntity<List<IngredientDTO>> searchIngredients(@RequestParam String name) {
         List<Ingredient> ingredients = menuService.findIngredientsByNameContaining(name);
-        List<IngredientResponseDTO> response = ingredients.stream()
-                .map(IngredientResponseDTO::fromEntity)
+        List<IngredientDTO> response = ingredients.stream()
+                .map(IngredientDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/ingredientes/vegetarian")
-    public ResponseEntity<List<IngredientResponseDTO>> getVegetarianIngredients() {
+    public ResponseEntity<List<IngredientDTO>> getVegetarianIngredients() {
         List<Ingredient> ingredients = menuService.findVegetarianIngredients();
-        List<IngredientResponseDTO> response = ingredients.stream()
-                .map(IngredientResponseDTO::fromEntity)
+        List<IngredientDTO> response = ingredients.stream()
+                .map(IngredientDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/ingredientes/most-used")
-    public ResponseEntity<List<IngredientResponseDTO>> getMostUsedIngredients() {
+    public ResponseEntity<List<IngredientDTO>> getMostUsedIngredients() {
         List<Ingredient> ingredients = menuService.findMostUsedIngredients();
-        List<IngredientResponseDTO> response = ingredients.stream()
-                .map(IngredientResponseDTO::fromEntity)
+        List<IngredientDTO> response = ingredients.stream()
+                .map(IngredientDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/ingredientes/price-range")
-    public ResponseEntity<List<IngredientResponseDTO>> getIngredientsByPriceRange(
+    public ResponseEntity<List<IngredientDTO>> getIngredientsByPriceRange(
             @RequestParam BigDecimal minPrice,
             @RequestParam BigDecimal maxPrice) {
         List<Ingredient> ingredients = menuService.findIngredientsByPriceRange(minPrice, maxPrice);
-        List<IngredientResponseDTO> response = ingredients.stream()
-                .map(IngredientResponseDTO::fromEntity)
+        List<IngredientDTO> response = ingredients.stream()
+                .map(IngredientDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/ingredientes")
-    public ResponseEntity<IngredientResponseDTO> createIngredient(@Valid @RequestBody IngredientRequestDTO request) {
+    public ResponseEntity<IngredientDTO> createIngredient(@Valid @RequestBody IngredientDTO request) {
         Ingredient ingredient = new Ingredient();
-        ingredient.setName(request.getName());
-        ingredient.setDescription(request.getDescription());
-        ingredient.setCategory(request.getCategory());
-        ingredient.setAdditionalPrice(request.getAdditionalPrice());
-        ingredient.setIsVegetarian(request.getIsVegetarian());
-        ingredient.setIsAvailable(request.getIsAvailable());
+        ingredient.setName(request.name());
+        ingredient.setDescription(request.description());
+        ingredient.setCategory(request.category());
+        ingredient.setAdditionalPrice(request.additionalPrice());
+        ingredient.setAllergenic(request.allergenic());
+        ingredient.setAvailable(request.available());
 
         Ingredient savedIngredient = menuService.saveIngredient(ingredient);
-        return ResponseEntity.status(HttpStatus.CREATED).body(IngredientResponseDTO.fromEntity(savedIngredient));
+        return ResponseEntity.status(HttpStatus.CREATED).body(IngredientDTO.fromEntity(savedIngredient));
     }
 
     @PutMapping("/ingredientes/{id}")
-    public ResponseEntity<IngredientResponseDTO> updateIngredient(@PathVariable Long id, @Valid @RequestBody IngredientRequestDTO request) {
+    public ResponseEntity<IngredientDTO> updateIngredient(@PathVariable Long id, @Valid @RequestBody IngredientDTO request) {
         return menuService.findIngredientById(id)
                 .map(ingredient -> {
-                    ingredient.setName(request.getName());
-                    ingredient.setDescription(request.getDescription());
-                    ingredient.setCategory(request.getCategory());
-                    ingredient.setAdditionalPrice(request.getAdditionalPrice());
-                    ingredient.setIsVegetarian(request.getIsVegetarian());
-                    ingredient.setIsAvailable(request.getIsAvailable());
+                    ingredient.setName(request.name());
+                    ingredient.setDescription(request.description());
+                    ingredient.setCategory(request.category());
+                    ingredient.setAdditionalPrice(request.additionalPrice());
+                    ingredient.setAllergenic(request.allergenic());
+                    ingredient.setAvailable(request.available());
 
                     Ingredient updatedIngredient = menuService.saveIngredient(ingredient);
-                    return ResponseEntity.ok(IngredientResponseDTO.fromEntity(updatedIngredient));
+                    return ResponseEntity.ok(IngredientDTO.fromEntity(updatedIngredient));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/ingredientes/{id}/availability")
-    public ResponseEntity<IngredientResponseDTO> updateIngredientAvailability(@PathVariable Long id, @RequestParam boolean isAvailable) {
+    public ResponseEntity<IngredientDTO> updateIngredientAvailability(@PathVariable Long id, @RequestParam boolean isAvailable) {
         try {
             Ingredient ingredient = menuService.updateIngredientAvailability(id, isAvailable);
-            return ResponseEntity.ok(IngredientResponseDTO.fromEntity(ingredient));
+            return ResponseEntity.ok(IngredientDTO.fromEntity(ingredient));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PatchMapping("/ingredientes/{id}/price")
-    public ResponseEntity<IngredientResponseDTO> updateIngredientPrice(@PathVariable Long id, @RequestParam BigDecimal newPrice) {
+    public ResponseEntity<IngredientDTO> updateIngredientPrice(@PathVariable Long id, @RequestParam BigDecimal newPrice) {
         try {
             Ingredient ingredient = menuService.updateIngredientPrice(id, newPrice);
-            return ResponseEntity.ok(IngredientResponseDTO.fromEntity(ingredient));
+            return ResponseEntity.ok(IngredientDTO.fromEntity(ingredient));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
@@ -306,7 +306,7 @@ public class MenuController {
     // === MENU SEARCH AND UTILITIES ===
 
     @GetMapping("/search")
-    public ResponseEntity<List<PizzaResponseDTO>> searchMenu(
+    public ResponseEntity<List<PizzaDTO>> searchMenu(
             @RequestParam(required = false) String searchTerm,
             @RequestParam(required = false) Pizza.PizzaCategory category,
             @RequestParam(required = false) BigDecimal maxPrice,
@@ -314,8 +314,8 @@ public class MenuController {
             @RequestParam(defaultValue = "false") boolean vegetarianOnly) {
         
         List<Pizza> pizzas = menuService.searchMenu(searchTerm, category, maxPrice, size, vegetarianOnly);
-        List<PizzaResponseDTO> response = pizzas.stream()
-                .map(PizzaResponseDTO::fromEntity)
+        List<PizzaDTO> response = pizzas.stream()
+                .map(PizzaDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }

@@ -28,7 +28,8 @@ public record OrderDTO(
     Long addressId,
     AddressDTO address,
     LocalDateTime orderDateTime,
-    LocalDateTime confirmationTime,
+    LocalDateTime estimatedDateTime,
+    LocalDateTime completionDateTime,
     BigDecimal total,
     BigDecimal deliveryFee,
     
@@ -43,35 +44,34 @@ public record OrderDTO(
 ) {
     
     public static OrderDTO fromEntity(Order order) {
-        CustomerDTO customerDTO = CustomerDTO.fromEntity(order.getCustomer());
+        CustomerDTO customerDTO = order.getCustomer() != null ? CustomerDTO.fromEntity(order.getCustomer()) : null;
         
         AddressDTO addressDTO = null;
-        if (order.getAddress() != null) {
-            addressDTO = AddressDTO.fromEntity(order.getAddress());
+        if (order.getDeliveryAddress() != null) {
+            addressDTO = AddressDTO.fromEntity(order.getDeliveryAddress());
         }
         
         List<OrderItemDTO> itemsDTO = null;
-        if (order.getOrderItems() != null) {
-            itemsDTO = order.getOrderItems().stream()
+        if (order.getItems() != null) {
+            itemsDTO = order.getItems().stream()
                 .map(OrderItemDTO::fromEntity)
                 .toList();
         }
         
+        // Delivery information would need to be retrieved separately
         DeliveryDTO deliveryDTO = null;
-        if (order.getDelivery() != null) {
-            deliveryDTO = DeliveryDTO.fromEntity(order.getDelivery());
-        }
         
         return new OrderDTO(
             order.getId(),
-            order.getCustomer().getId(),
+            order.getCustomer() != null ? order.getCustomer().getId() : null,
             customerDTO,
             order.getType(),
             order.getStatus(),
-            order.getAddress() != null ? order.getAddress().getId() : null,
+            order.getDeliveryAddress() != null ? order.getDeliveryAddress().getId() : null,
             addressDTO,
             order.getOrderDateTime(),
-            order.getConfirmationTime(),
+            order.getEstimatedDateTime(),
+            order.getCompletionDateTime(),
             order.getTotal(),
             order.getDeliveryFee(),
             order.getObservations(),

@@ -1,12 +1,15 @@
 package br.com.alg.algexpress.infra.service;
 
 import br.com.alg.algexpress.domain.customer.Customer;
+import br.com.alg.algexpress.domain.valueObjects.Address;
+import br.com.alg.algexpress.dto.customer.AddressDTO;
 import br.com.alg.algexpress.infra.repository.customer.CustomerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -191,5 +194,113 @@ public class CustomerService {
 
     public void deleteCustomer(Long customerId) {
         customerRepository.deleteById(customerId);
+    }
+    
+    // ===== ADDRESS MANAGEMENT METHODS =====
+    
+    public Address addAddressToCustomer(Long customerId, AddressDTO addressDTO) {
+        Optional<Customer> customerOpt = customerRepository.findById(customerId);
+        if (customerOpt.isPresent()) {
+            Customer customer = customerOpt.get();
+            
+            Address address = new Address();
+            address.setCustomer(customer);
+            address.setStreet(addressDTO.street());
+            address.setNumber(addressDTO.number());
+            address.setComplement(addressDTO.complement());
+            address.setNeighborhood(addressDTO.neighborhood());
+            address.setCity(addressDTO.city());
+            address.setState(addressDTO.state());
+            address.setZipCode(addressDTO.zipCode());
+            address.setType(addressDTO.type());
+            address.setReferencePoints(addressDTO.referencePoints());
+            address.setType(addressDTO.type() != null ? addressDTO.type() : Address.AddressType.RESIDENTIAL);
+            
+            // Initialize addresses list if null
+            if (customer.getAddresses() == null) {
+                customer.setAddresses(new ArrayList<>());
+            }
+            
+            customer.getAddresses().add(address);
+            Customer savedCustomer = customerRepository.save(customer);
+            
+            // Return the newly added address (last one in the list)
+            List<Address> addresses = savedCustomer.getAddresses();
+            return addresses.get(addresses.size() - 1);
+        }
+        throw new RuntimeException("Customer not found with id: " + customerId);
+    }
+    
+    public Address updateCustomerAddress(Long customerId, Long addressId, AddressDTO addressDTO) {
+        Optional<Customer> customerOpt = customerRepository.findById(customerId);
+        if (customerOpt.isPresent()) {
+            Customer customer = customerOpt.get();
+            
+            if (customer.getAddresses() != null) {
+                for (Address address : customer.getAddresses()) {
+                    if (address.getId().equals(addressId)) {
+                        address.setStreet(addressDTO.street());
+                        address.setNumber(addressDTO.number());
+                        address.setComplement(addressDTO.complement());
+                        address.setNeighborhood(addressDTO.neighborhood());
+                        address.setCity(addressDTO.city());
+                        address.setState(addressDTO.state());
+                        address.setZipCode(addressDTO.zipCode());
+                        address.setType(addressDTO.type());
+                        address.setReferencePoints(addressDTO.referencePoints());
+            address.setType(addressDTO.type() != null ? addressDTO.type() : Address.AddressType.RESIDENTIAL);
+                        
+                        customerRepository.save(customer);
+                        return address;
+                    }
+                }
+            }
+            throw new RuntimeException("Address not found with id: " + addressId + " for customer: " + customerId);
+        }
+        throw new RuntimeException("Customer not found with id: " + customerId);
+    }
+    
+    public void removeAddressFromCustomer(Long customerId, Long addressId) {
+        Optional<Customer> customerOpt = customerRepository.findById(customerId);
+        if (customerOpt.isPresent()) {
+            Customer customer = customerOpt.get();
+            
+            if (customer.getAddresses() != null) {
+                boolean removed = customer.getAddresses().removeIf(address -> address.getId().equals(addressId));
+                if (removed) {
+                    customerRepository.save(customer);
+                    return;
+                }
+            }
+            throw new RuntimeException("Address not found with id: " + addressId + " for customer: " + customerId);
+        }
+        throw new RuntimeException("Customer not found with id: " + customerId);
+    }
+    
+    public void setPrimaryAddress(Long customerId, Long addressId) {
+        Optional<Customer> customerOpt = customerRepository.findById(customerId);
+        if (customerOpt.isPresent()) {
+            Customer customer = customerOpt.get();
+            
+            if (customer.getAddresses() != null) {
+                boolean found = false;
+                for (Address address : customer.getAddresses()) {
+                    if (address.getId().equals(addressId)) {
+                        // Set this address as primary and others as non-primary
+                        address.setPrimary(true);
+                        found = true;
+                    } else {
+                        address.setPrimary(false);
+                    }
+                }
+                
+                if (found) {
+                    customerRepository.save(customer);
+                    return;
+                }
+            }
+            throw new RuntimeException("Address not found with id: " + addressId + " for customer: " + customerId);
+        }
+        throw new RuntimeException("Customer not found with id: " + customerId);
     }
 }

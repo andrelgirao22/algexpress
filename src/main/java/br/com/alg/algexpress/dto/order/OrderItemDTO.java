@@ -52,12 +52,12 @@ public record OrderItemDTO(
         
         return new OrderItemDTO(
             orderItem.getId(),
-            orderItem.getPizza().getId(),
-            PizzaDTO.fromEntity(orderItem.getPizza()),
-            Pizza.PizzaSize.valueOf(orderItem.getSize().name()),
+            orderItem.getPizza() != null ? orderItem.getPizza().getId() : null,
+            orderItem.getPizza() != null ? PizzaDTO.fromEntity(orderItem.getPizza()) : null,
+            orderItem.getSize(),
             orderItem.getQuantity(),
             orderItem.getUnitPrice(),
-            orderItem.getSubtotal(),
+            orderItem.getTotalPrice(),
             null,
             null,
             additionalIngredients,

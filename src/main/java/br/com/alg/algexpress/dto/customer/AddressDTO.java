@@ -41,18 +41,20 @@ public record AddressDTO(
     @Pattern(regexp = "^\\d{5}-?\\d{3}$", message = "ZIP code format is invalid")
     String zipCode,
     
-    @Size(max = 100, message = "Reference must not exceed 100 characters")
-    String reference,
+    @Size(max = 200, message = "Reference points must not exceed 200 characters")
+    String referencePoints,
+    
+    Address.AddressType type,
     
     BigDecimal deliveryFee,
 
-    Boolean isDefault
+    Boolean primary
 ) {
     
     public static AddressDTO fromEntity(Address address) {
         return new AddressDTO(
             address.getId(),
-            address.getCustomer().getId(),
+            address.getCustomer() != null ? address.getCustomer().getId() : null,
             address.getStreet(),
             address.getNumber(),
             address.getComplement(),
@@ -61,8 +63,9 @@ public record AddressDTO(
             address.getState(),
             address.getZipCode(),
             address.getReferencePoints(),
+            address.getType(),
             address.getDeliveryFee(),
-            false  // isDefault field não existe na entidade
+            address.getPrimary()
         );
     }
     
@@ -76,8 +79,10 @@ public record AddressDTO(
         address.setCity(this.city);
         address.setState(this.state);
         address.setZipCode(this.zipCode);
-        address.setReferencePoints(this.reference);
+        address.setReferencePoints(this.referencePoints);
+        address.setType(this.type);
         address.setDeliveryFee(this.deliveryFee);
+        address.setPrimary(this.primary != null ? this.primary : false);
         return address;
     }
 }

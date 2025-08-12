@@ -28,6 +28,9 @@ public class Customer {
     @Column(length = 100)
     private String email;
     
+    @Column(length = 14)
+    private String cpf;
+    
     @Column(name = "registration_date", nullable = false)
     private LocalDateTime registrationDate;
     

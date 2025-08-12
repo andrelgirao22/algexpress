@@ -10,12 +10,14 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/entregas")
 @CrossOrigin(origins = "*")
+@Tag(name = "Entregas", description = "API para gerenciamento de entregas e entregadores")
 public class DeliveryController {
 
     private final DeliveryService deliveryService;

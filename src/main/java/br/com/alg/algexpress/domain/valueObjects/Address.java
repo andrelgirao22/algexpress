@@ -58,6 +58,9 @@ public class Address {
     @Column(name = "reference_points", length = 200)
     private String referencePoints;
     
+    @Column(name = "is_primary", nullable = false)
+    private Boolean primary = false;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
