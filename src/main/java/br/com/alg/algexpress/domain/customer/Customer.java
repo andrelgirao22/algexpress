@@ -1,6 +1,6 @@
 package br.com.alg.algexpress.domain.customer;
 
-import br.com.alg.algexpress.domain.address.Address;
+import br.com.alg.algexpress.domain.valueObjects.Address;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

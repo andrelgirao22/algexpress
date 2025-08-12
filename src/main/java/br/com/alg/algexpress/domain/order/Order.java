@@ -1,6 +1,6 @@
 package br.com.alg.algexpress.domain.order;
 
-import br.com.alg.algexpress.domain.address.Address;
+import br.com.alg.algexpress.domain.valueObjects.Address;
 import br.com.alg.algexpress.domain.customer.Customer;
 import br.com.alg.algexpress.domain.payment.Payment;
 import jakarta.persistence.*;
