@@ -3,6 +3,7 @@ package br.com.alg.algexpress.infra.web;
 import br.com.alg.algexpress.domain.customer.Customer;
 import br.com.alg.algexpress.domain.valueObjects.Address;
 import br.com.alg.algexpress.dto.customer.CustomerDTO;
+import br.com.alg.algexpress.dto.customer.CustomerSummaryDTO;
 import br.com.alg.algexpress.dto.customer.AddressDTO;
 import br.com.alg.algexpress.infra.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,12 +38,12 @@ public class CustomerController {
 
     @GetMapping
     @Operation(summary = "Listar clientes ativos", 
-               description = "Retorna todos os clientes com status ativo")
-    @ApiResponse(responseCode = "200", description = "Lista de clientes ativos")
-    public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
+               description = "Retorna lista resumida de todos os clientes com status ativo (sem endereços)")
+    @ApiResponse(responseCode = "200", description = "Lista resumida de clientes ativos")
+    public ResponseEntity<List<CustomerSummaryDTO>> getAllCustomers() {
         List<Customer> customers = customerService.findActiveCustomers();
-        List<CustomerDTO> response = customers.stream()
-                .map(CustomerDTO::fromEntity)
+        List<CustomerSummaryDTO> response = customers.stream()
+                .map(CustomerSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
@@ -77,10 +78,10 @@ public class CustomerController {
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<CustomerDTO>> getCustomersByStatus(@PathVariable Customer.CustomerStatus status) {
+    public ResponseEntity<List<CustomerSummaryDTO>> getCustomersByStatus(@PathVariable Customer.CustomerStatus status) {
         List<Customer> customers = customerService.findByStatus(status);
-        List<CustomerDTO> response = customers.stream()
-                .map(CustomerDTO::fromEntity)
+        List<CustomerSummaryDTO> response = customers.stream()
+                .map(CustomerSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
@@ -89,59 +90,59 @@ public class CustomerController {
     @Operation(summary = "Buscar clientes por nome", 
                description = "Busca clientes que contenham o nome especificado")
     @ApiResponse(responseCode = "200", description = "Lista de clientes encontrados")
-    public ResponseEntity<List<CustomerDTO>> searchCustomersByName(
+    public ResponseEntity<List<CustomerSummaryDTO>> searchCustomersByName(
             @Parameter(description = "Nome ou parte do nome do cliente", required = true) 
             @RequestParam String name) {
         List<Customer> customers = customerService.findByNameContaining(name);
-        List<CustomerDTO> response = customers.stream()
-                .map(CustomerDTO::fromEntity)
+        List<CustomerSummaryDTO> response = customers.stream()
+                .map(CustomerSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/loyalty-points")
-    public ResponseEntity<List<CustomerDTO>> getCustomersByLoyaltyPoints(@RequestParam Integer minPoints) {
+    public ResponseEntity<List<CustomerSummaryDTO>> getCustomersByLoyaltyPoints(@RequestParam Integer minPoints) {
         List<Customer> customers = customerService.findByLoyaltyPointsGreaterThan(minPoints);
-        List<CustomerDTO> response = customers.stream()
-                .map(CustomerDTO::fromEntity)
+        List<CustomerSummaryDTO> response = customers.stream()
+                .map(CustomerSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/top-loyalty")
-    public ResponseEntity<List<CustomerDTO>> getTopCustomersByLoyalty(@RequestParam(defaultValue = "10") int limit) {
+    public ResponseEntity<List<CustomerSummaryDTO>> getTopCustomersByLoyalty(@RequestParam(defaultValue = "10") int limit) {
         List<Customer> customers = customerService.findTopCustomersByLoyaltyPoints(limit);
-        List<CustomerDTO> response = customers.stream()
-                .map(CustomerDTO::fromEntity)
+        List<CustomerSummaryDTO> response = customers.stream()
+                .map(CustomerSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/created-between")
-    public ResponseEntity<List<CustomerDTO>> getCustomersCreatedBetween(
+    public ResponseEntity<List<CustomerSummaryDTO>> getCustomersCreatedBetween(
             @RequestParam LocalDateTime startDate,
             @RequestParam LocalDateTime endDate) {
         List<Customer> customers = customerService.findCustomersCreatedBetween(startDate, endDate);
-        List<CustomerDTO> response = customers.stream()
-                .map(CustomerDTO::fromEntity)
+        List<CustomerSummaryDTO> response = customers.stream()
+                .map(CustomerSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/most-orders")
-    public ResponseEntity<List<CustomerDTO>> getCustomersWithMostOrders() {
+    public ResponseEntity<List<CustomerSummaryDTO>> getCustomersWithMostOrders() {
         List<Customer> customers = customerService.findCustomersWithMostOrders();
-        List<CustomerDTO> response = customers.stream()
-                .map(CustomerDTO::fromEntity)
+        List<CustomerSummaryDTO> response = customers.stream()
+                .map(CustomerSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/highest-spending")
-    public ResponseEntity<List<CustomerDTO>> getCustomersWithHighestSpending() {
+    public ResponseEntity<List<CustomerSummaryDTO>> getCustomersWithHighestSpending() {
         List<Customer> customers = customerService.findCustomersWithHighestSpending();
-        List<CustomerDTO> response = customers.stream()
-                .map(CustomerDTO::fromEntity)
+        List<CustomerSummaryDTO> response = customers.stream()
+                .map(CustomerSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }

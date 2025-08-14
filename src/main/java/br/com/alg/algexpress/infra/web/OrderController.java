@@ -7,6 +7,7 @@ import br.com.alg.algexpress.domain.order.Order;
 import br.com.alg.algexpress.domain.order.OrderItem;
 // AddressService removido - addresses são gerenciados via CustomerService
 import br.com.alg.algexpress.dto.order.OrderDTO;
+import br.com.alg.algexpress.dto.order.OrderSummaryDTO;
 import br.com.alg.algexpress.dto.order.OrderItemDTO;
 import br.com.alg.algexpress.infra.service.CustomerService;
 import br.com.alg.algexpress.infra.service.MenuService;
@@ -41,10 +42,10 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+    public ResponseEntity<List<OrderSummaryDTO>> getAllOrders() {
         List<Order> orders = orderService.findActiveOrders();
-        List<OrderDTO> response = orders.stream()
-                .map(OrderDTO::fromEntity)
+        List<OrderSummaryDTO> response = orders.stream()
+                .map(OrderSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
@@ -57,97 +58,97 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByCustomer(@PathVariable Long customerId) {
+    public ResponseEntity<List<OrderSummaryDTO>> getOrdersByCustomer(@PathVariable Long customerId) {
         List<Order> orders = orderService.findByCustomerId(customerId);
-        List<OrderDTO> response = orders.stream()
-                .map(OrderDTO::fromEntity)
+        List<OrderSummaryDTO> response = orders.stream()
+                .map(OrderSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/customer/{customerId}/history")
-    public ResponseEntity<List<OrderDTO>> getCustomerOrderHistory(@PathVariable Long customerId) {
+    public ResponseEntity<List<OrderSummaryDTO>> getCustomerOrderHistory(@PathVariable Long customerId) {
         List<Order> orders = orderService.findCustomerOrderHistory(customerId);
-        List<OrderDTO> response = orders.stream()
-                .map(OrderDTO::fromEntity)
+        List<OrderSummaryDTO> response = orders.stream()
+                .map(OrderSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByStatus(@PathVariable Order.OrderStatus status) {
+    public ResponseEntity<List<OrderSummaryDTO>> getOrdersByStatus(@PathVariable Order.OrderStatus status) {
         List<Order> orders = orderService.findByStatus(status);
-        List<OrderDTO> response = orders.stream()
-                .map(OrderDTO::fromEntity)
+        List<OrderSummaryDTO> response = orders.stream()
+                .map(OrderSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/type/{type}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByType(@PathVariable Order.OrderType type) {
+    public ResponseEntity<List<OrderSummaryDTO>> getOrdersByType(@PathVariable Order.OrderType type) {
         List<Order> orders = orderService.findByType(type);
-        List<OrderDTO> response = orders.stream()
-                .map(OrderDTO::fromEntity)
+        List<OrderSummaryDTO> response = orders.stream()
+                .map(OrderSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/today")
-    public ResponseEntity<List<OrderDTO>> getTodaysOrders() {
+    public ResponseEntity<List<OrderSummaryDTO>> getTodaysOrders() {
         List<Order> orders = orderService.findTodaysOrders();
-        List<OrderDTO> response = orders.stream()
-                .map(OrderDTO::fromEntity)
+        List<OrderSummaryDTO> response = orders.stream()
+                .map(OrderSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/active")
-    public ResponseEntity<List<OrderDTO>> getActiveOrders() {
+    public ResponseEntity<List<OrderSummaryDTO>> getActiveOrders() {
         List<Order> orders = orderService.findActiveOrders();
-        List<OrderDTO> response = orders.stream()
-                .map(OrderDTO::fromEntity)
+        List<OrderSummaryDTO> response = orders.stream()
+                .map(OrderSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/delivery/active")
-    public ResponseEntity<List<OrderDTO>> getActiveDeliveryOrders() {
+    public ResponseEntity<List<OrderSummaryDTO>> getActiveDeliveryOrders() {
         List<Order> orders = orderService.findActiveDeliveryOrders();
-        List<OrderDTO> response = orders.stream()
-                .map(OrderDTO::fromEntity)
+        List<OrderSummaryDTO> response = orders.stream()
+                .map(OrderSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/date-range")
-    public ResponseEntity<List<OrderDTO>> getOrdersBetweenDates(
+    public ResponseEntity<List<OrderSummaryDTO>> getOrdersBetweenDates(
             @RequestParam LocalDateTime startDate,
             @RequestParam LocalDateTime endDate) {
         List<Order> orders = orderService.findOrdersBetweenDates(startDate, endDate);
-        List<OrderDTO> response = orders.stream()
-                .map(OrderDTO::fromEntity)
+        List<OrderSummaryDTO> response = orders.stream()
+                .map(OrderSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/total-range")
-    public ResponseEntity<List<OrderDTO>> getOrdersByTotalRange(
+    public ResponseEntity<List<OrderSummaryDTO>> getOrdersByTotalRange(
             @RequestParam BigDecimal minTotal,
             @RequestParam BigDecimal maxTotal) {
         List<Order> orders = orderService.findByTotalBetween(minTotal, maxTotal);
-        List<OrderDTO> response = orders.stream()
-                .map(OrderDTO::fromEntity)
+        List<OrderSummaryDTO> response = orders.stream()
+                .map(OrderSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/customer/{customerId}/status/{status}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByCustomerAndStatus(
+    public ResponseEntity<List<OrderSummaryDTO>> getOrdersByCustomerAndStatus(
             @PathVariable Long customerId,
             @PathVariable Order.OrderStatus status) {
         List<Order> orders = orderService.findByCustomerIdAndStatus(customerId, status);
-        List<OrderDTO> response = orders.stream()
-                .map(OrderDTO::fromEntity)
+        List<OrderSummaryDTO> response = orders.stream()
+                .map(OrderSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }

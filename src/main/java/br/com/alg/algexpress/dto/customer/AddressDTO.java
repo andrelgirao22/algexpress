@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 public record AddressDTO(
     Long id,
     
-    @NotNull(message = "Customer ID is required")
     Long customerId,
     
     @NotBlank(message = "Street is required")

@@ -229,9 +229,9 @@ public class CustomerService {
             address.setCity(addressDTO.city());
             address.setState(addressDTO.state());
             address.setZipCode(addressDTO.zipCode());
-            address.setType(addressDTO.type());
-            address.setReferencePoints(addressDTO.referencePoints());
             address.setType(addressDTO.type() != null ? addressDTO.type() : Address.AddressType.RESIDENTIAL);
+            address.setReferencePoints(addressDTO.referencePoints());
+            address.setDeliveryFee(addressDTO.deliveryFee() != null ? addressDTO.deliveryFee() : calculateDeliveryFee(addressDTO));
             
             // Initialize addresses list if null
             if (customer.getAddresses() == null) {
@@ -319,5 +319,21 @@ public class CustomerService {
             throw new RuntimeException("Address not found with id: " + addressId + " for customer: " + customerId);
         }
         throw new RuntimeException("Customer not found with id: " + customerId);
+    }
+    
+    private BigDecimal calculateDeliveryFee(AddressDTO addressDTO) {
+        // Basic delivery fee calculation based on neighborhood/city
+        // In a real system, this could integrate with maps API for distance calculation
+        BigDecimal baseFee = new BigDecimal("5.00"); // Base fee
+        
+        // Different fees based on city (example logic)
+        if ("São Paulo".equalsIgnoreCase(addressDTO.city())) {
+            return baseFee; // Standard fee for São Paulo
+        } else if (addressDTO.city() != null && addressDTO.city().toLowerCase().contains("grande") ||
+                   addressDTO.city() != null && addressDTO.city().toLowerCase().contains("abc")) {
+            return baseFee.add(new BigDecimal("2.00")); // Higher fee for Greater São Paulo
+        } else {
+            return baseFee.add(new BigDecimal("5.00")); // Even higher for other cities
+        }
     }
 }

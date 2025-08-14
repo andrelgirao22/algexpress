@@ -4,6 +4,7 @@ import br.com.alg.algexpress.domain.menu.Ingredient;
 import br.com.alg.algexpress.domain.menu.Pizza;
 import br.com.alg.algexpress.dto.menu.IngredientDTO;
 import br.com.alg.algexpress.dto.menu.PizzaDTO;
+import br.com.alg.algexpress.dto.menu.PizzaSummaryDTO;
 import br.com.alg.algexpress.infra.service.MenuService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -30,10 +31,10 @@ public class MenuController {
     // === PIZZA ENDPOINTS ===
 
     @GetMapping("/pizzas")
-    public ResponseEntity<List<PizzaDTO>> getAllPizzas() {
+    public ResponseEntity<List<PizzaSummaryDTO>> getAllPizzas() {
         List<Pizza> pizzas = menuService.findAvailablePizzas();
-        List<PizzaDTO> response = pizzas.stream()
-                .map(PizzaDTO::fromEntity)
+        List<PizzaSummaryDTO> response = pizzas.stream()
+                .map(PizzaSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
@@ -46,58 +47,58 @@ public class MenuController {
     }
 
     @GetMapping("/pizzas/category/{category}")
-    public ResponseEntity<List<PizzaDTO>> getPizzasByCategory(@PathVariable Pizza.PizzaCategory category) {
+    public ResponseEntity<List<PizzaSummaryDTO>> getPizzasByCategory(@PathVariable Pizza.PizzaCategory category) {
         List<Pizza> pizzas = menuService.findPizzasByCategory(category);
-        List<PizzaDTO> response = pizzas.stream()
-                .map(PizzaDTO::fromEntity)
+        List<PizzaSummaryDTO> response = pizzas.stream()
+                .map(PizzaSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pizzas/search")
-    public ResponseEntity<List<PizzaDTO>> searchPizzas(@RequestParam String name) {
+    public ResponseEntity<List<PizzaSummaryDTO>> searchPizzas(@RequestParam String name) {
         List<Pizza> pizzas = menuService.findPizzasByNameContaining(name);
-        List<PizzaDTO> response = pizzas.stream()
-                .map(PizzaDTO::fromEntity)
+        List<PizzaSummaryDTO> response = pizzas.stream()
+                .map(PizzaSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pizzas/popular")
-    public ResponseEntity<List<PizzaDTO>> getMostPopularPizzas() {
+    public ResponseEntity<List<PizzaSummaryDTO>> getMostPopularPizzas() {
         List<Pizza> pizzas = menuService.findMostPopularPizzas();
-        List<PizzaDTO> response = pizzas.stream()
-                .map(PizzaDTO::fromEntity)
+        List<PizzaSummaryDTO> response = pizzas.stream()
+                .map(PizzaSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pizzas/vegetarian")
-    public ResponseEntity<List<PizzaDTO>> getVegetarianPizzas() {
+    public ResponseEntity<List<PizzaSummaryDTO>> getVegetarianPizzas() {
         List<Pizza> pizzas = menuService.findVegetarianPizzas();
-        List<PizzaDTO> response = pizzas.stream()
-                .map(PizzaDTO::fromEntity)
+        List<PizzaSummaryDTO> response = pizzas.stream()
+                .map(PizzaSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pizzas/with-ingredient/{ingredientId}")
-    public ResponseEntity<List<PizzaDTO>> getPizzasWithIngredient(@PathVariable Long ingredientId) {
+    public ResponseEntity<List<PizzaSummaryDTO>> getPizzasWithIngredient(@PathVariable Long ingredientId) {
         List<Pizza> pizzas = menuService.findPizzasWithIngredient(ingredientId);
-        List<PizzaDTO> response = pizzas.stream()
-                .map(PizzaDTO::fromEntity)
+        List<PizzaSummaryDTO> response = pizzas.stream()
+                .map(PizzaSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/pizzas/price-range")
-    public ResponseEntity<List<PizzaDTO>> getPizzasByPriceRange(
+    public ResponseEntity<List<PizzaSummaryDTO>> getPizzasByPriceRange(
             @RequestParam BigDecimal minPrice,
             @RequestParam BigDecimal maxPrice,
             @RequestParam Pizza.PizzaSize size) {
         List<Pizza> pizzas = menuService.findPizzasByPriceRange(minPrice, maxPrice, size);
-        List<PizzaDTO> response = pizzas.stream()
-                .map(PizzaDTO::fromEntity)
+        List<PizzaSummaryDTO> response = pizzas.stream()
+                .map(PizzaSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
@@ -306,7 +307,7 @@ public class MenuController {
     // === MENU SEARCH AND UTILITIES ===
 
     @GetMapping("/search")
-    public ResponseEntity<List<PizzaDTO>> searchMenu(
+    public ResponseEntity<List<PizzaSummaryDTO>> searchMenu(
             @RequestParam(required = false) String searchTerm,
             @RequestParam(required = false) Pizza.PizzaCategory category,
             @RequestParam(required = false) BigDecimal maxPrice,
@@ -314,8 +315,8 @@ public class MenuController {
             @RequestParam(defaultValue = "false") boolean vegetarianOnly) {
         
         List<Pizza> pizzas = menuService.searchMenu(searchTerm, category, maxPrice, size, vegetarianOnly);
-        List<PizzaDTO> response = pizzas.stream()
-                .map(PizzaDTO::fromEntity)
+        List<PizzaSummaryDTO> response = pizzas.stream()
+                .map(PizzaSummaryDTO::fromEntity)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
     }
