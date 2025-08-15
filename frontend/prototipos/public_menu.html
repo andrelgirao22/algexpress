@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+        rel="stylesheet"
+        as="style"
+        onload="this.rel='stylesheet'"
+        href="https://fonts.googleapis.com/css2?display=swap&family=Inter%3Awght%40400%3B500%3B700%3B900&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+    <title>Cardápio - AlgExpress</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body>
+<div class="relative flex size-full min-h-screen flex-col bg-gradient-to-br from-orange-50 to-red-50 group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+    
+    <!-- Header -->
+    <header class="sticky top-0 bg-white shadow-sm z-40">
+        <div class="flex items-center justify-between whitespace-nowrap px-6 lg:px-10 py-4">
+            <div class="flex items-center gap-4 text-[#d2440e]">
+                <div class="size-8">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor"></path>
+                    </svg>
+                </div>
+                <h1 class="text-[#d2440e] text-2xl font-bold leading-tight tracking-[-0.015em]">AlgExpress</h1>
+            </div>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-6">
+                <a href="#menu" class="text-gray-700 hover:text-[#d2440e] font-medium">Cardápio</a>
+                <a href="#about" class="text-gray-700 hover:text-[#d2440e] font-medium">Sobre</a>
+                <a href="#contact" class="text-gray-700 hover:text-[#d2440e] font-medium">Contato</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <!-- Cart -->
+                <button class="relative p-2 text-gray-700 hover:text-[#d2440e] transition-colors" onclick="toggleCart()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M222.14,58.87A8,8,0,0,0,216,56H54.68L49.79,29.14A16,16,0,0,0,34.05,16H16a8,8,0,0,0,0,16H34.05l26.94,120.72A24,24,0,0,0,84.1,168h87.73a24,24,0,0,0,23.61-19.71L208.1,64.87A8,8,0,0,0,222.14,58.87Z"></path>
+                    </svg>
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" id="cartCount">0</span>
+                </button>
+
+                <!-- User Menu -->
+                <div class="flex gap-2">
+                    <a href="customer_login.html" class="text-[#d2440e] text-sm font-medium hover:text-red-600">Entrar</a>
+                    <a href="customer_signup.html" class="bg-[#d2440e] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600 transition-colors">Cadastrar</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-orange-500 to-red-500 text-white py-16">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">As Melhores Pizzas da Cidade</h1>
+            <p class="text-xl mb-8 opacity-90">Sabores únicos, ingredientes frescos e entrega rápida</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <div class="flex items-center gap-2 bg-white bg-opacity-20 rounded-lg px-4 py-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Z"></path>
+                    </svg>
+                    <span class="text-sm font-medium">Entrega em até 30min</span>
+                </div>
+                <div class="flex items-center gap-2 bg-white bg-opacity-20 rounded-lg px-4 py-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Z"></path>
+                    </svg>
+                    <span class="text-sm font-medium">Ingredientes frescos</span>
+                </div>
+                <div class="flex items-center gap-2 bg-white bg-opacity-20 rounded-lg px-4 py-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Z"></path>
+                    </svg>
+                    <span class="text-sm font-medium">Pontos de fidelidade</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-12">
+        <div class="max-w-6xl mx-auto px-6">
+            
+            <!-- Section Header -->
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Nosso Cardápio</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Escolha entre nossa seleção de pizzas artesanais, feitas com ingredientes premium e muito amor</p>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button class="px-6 py-2 rounded-full bg-[#d2440e] text-white font-medium transition-all" onclick="filterCategory('ALL')" id="filter-ALL">
+                    Todas
+                </button>
+                <button class="px-6 py-2 rounded-full bg-white border border-gray-300 text-gray-700 font-medium hover:border-[#d2440e] hover:text-[#d2440e] transition-all" onclick="filterCategory('TRADITIONAL')" id="filter-TRADITIONAL">
+                    Tradicionais
+                </button>
+                <button class="px-6 py-2 rounded-full bg-white border border-gray-300 text-gray-700 font-medium hover:border-[#d2440e] hover:text-[#d2440e] transition-all" onclick="filterCategory('GOURMET')" id="filter-GOURMET">
+                    Gourmet
+                </button>
+                <button class="px-6 py-2 rounded-full bg-white border border-gray-300 text-gray-700 font-medium hover:border-[#d2440e] hover:text-[#d2440e] transition-all" onclick="filterCategory('SWEET')" id="filter-SWEET">
+                    Doces
+                </button>
+                <button class="px-6 py-2 rounded-full bg-white border border-gray-300 text-gray-700 font-medium hover:border-[#d2440e] hover:text-[#d2440e] transition-all" onclick="showVegetarian()" id="filter-VEGETARIAN">
+                    Vegetarianas
+                </button>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="max-w-md mx-auto mb-8">
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#6b7280" viewBox="0 0 256 256">
+                            <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                        </svg>
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Buscar pizza..."
+                        class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                        id="searchInput"
+                        onkeyup="searchPizzas()"
+                    />
+                </div>
+            </div>
+
+            <!-- Pizzas Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="pizzasGrid">
+                
+                <!-- Pizza Card 1 -->
+                <div class="pizza-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-1" data-category="TRADITIONAL">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=250&fit=crop" alt="Pizza Margherita" class="w-full h-48 object-cover">
+                        <div class="absolute top-3 left-3">
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">Tradicional</span>
+                        </div>
+                        <div class="absolute top-3 right-3">
+                            <button class="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-gray-50 transition-colors" onclick="toggleFavorite(1)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#6b7280" viewBox="0 0 256 256">
+                                    <path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32Z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Pizza Margherita</h3>
+                        <p class="text-gray-600 text-sm mb-4">Molho de tomate artesanal, mozzarella fresca, manjericão e azeite extra virgem</p>
+                        
+                        <!-- Sizes and Prices -->
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Pequena (25cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 25,90</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Média (30cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 35,90</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Grande (35cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 45,90</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Extra Grande (40cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 55,90</span>
+                            </div>
+                        </div>
+
+                        <!-- Add to Cart Button -->
+                        <button
+                            class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transition-all transform hover:scale-105"
+                            onclick="openPizzaModal(1, 'Pizza Margherita', 'Molho de tomate artesanal, mozzarella fresca, manjericão e azeite extra virgem', {SMALL: 25.90, MEDIUM: 35.90, LARGE: 45.90, EXTRA_LARGE: 55.90})"
+                        >
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pizza Card 2 -->
+                <div class="pizza-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-1" data-category="TRADITIONAL">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=250&fit=crop" alt="Pizza Pepperoni" class="w-full h-48 object-cover">
+                        <div class="absolute top-3 left-3">
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">Tradicional</span>
+                        </div>
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-medium">🔥 Popular</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Pizza Pepperoni</h3>
+                        <p class="text-gray-600 text-sm mb-4">Molho de tomate, mozzarella e fatias generosas de pepperoni importado</p>
+                        
+                        <!-- Sizes and Prices -->
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Pequena (25cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 28,90</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Média (30cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 38,90</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Grande (35cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 48,90</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Extra Grande (40cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 58,90</span>
+                            </div>
+                        </div>
+
+                        <!-- Add to Cart Button -->
+                        <button
+                            class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transition-all transform hover:scale-105"
+                            onclick="openPizzaModal(2, 'Pizza Pepperoni', 'Molho de tomate, mozzarella e fatias generosas de pepperoni importado', {SMALL: 28.90, MEDIUM: 38.90, LARGE: 48.90, EXTRA_LARGE: 58.90})"
+                        >
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pizza Card 3 -->
+                <div class="pizza-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-1" data-category="GOURMET">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=250&fit=crop" alt="Quattro Formaggi" class="w-full h-48 object-cover">
+                        <div class="absolute top-3 left-3">
+                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">Gourmet</span>
+                        </div>
+                        <div class="absolute top-3 right-3">
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">🌱 Vegetariana</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Quattro Formaggi</h3>
+                        <p class="text-gray-600 text-sm mb-4">Molho branco cremoso com mozzarella, gorgonzola, parmesão e provolone</p>
+                        
+                        <!-- Sizes and Prices -->
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Pequena (25cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 32,90</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Média (30cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 42,90</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Grande (35cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 52,90</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="text-gray-600">Extra Grande (40cm)</span>
+                                <span class="font-semibold text-gray-900">R$ 62,90</span>
+                            </div>
+                        </div>
+
+                        <!-- Add to Cart Button -->
+                        <button
+                            class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transition-all transform hover:scale-105"
+                            onclick="openPizzaModal(3, 'Quattro Formaggi', 'Molho branco cremoso com mozzarella, gorgonzola, parmesão e provolone', {SMALL: 32.90, MEDIUM: 42.90, LARGE: 52.90, EXTRA_LARGE: 62.90})"
+                        >
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Load More Button -->
+            <div class="text-center mt-12">
+                <button class="bg-white border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:border-[#d2440e] hover:text-[#d2440e] transition-all" onclick="loadMorePizzas()">
+                    Carregar Mais Pizzas
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="size-8 text-[#d2440e]">
+                            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold">AlgExpress</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm">As melhores pizzas da cidade, feitas com amor e entregues na sua casa.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Cardápio</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white">Pizzas Tradicionais</a></li>
+                        <li><a href="#" class="hover:text-white">Pizzas Gourmet</a></li>
+                        <li><a href="#" class="hover:text-white">Pizzas Doces</a></li>
+                        <li><a href="#" class="hover:text-white">Bebidas</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contato</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>(11) 99999-9999</li>
+                        <li>contato@algexpress.com</li>
+                        <li>Rua das Pizzas, 123<br>São Paulo - SP</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Horário</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>Segunda a Quinta: 18h - 23h</li>
+                        <li>Sexta e Sábado: 18h - 00h</li>
+                        <li>Domingo: 18h - 22h</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+                <p>© 2024 AlgExpress. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+<!-- Pizza Modal -->
+<div id="pizzaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900" id="modalPizzaName">Pizza Margherita</h3>
+                    <p class="text-gray-600 text-sm" id="modalPizzaDescription">Descrição da pizza</p>
+                </div>
+                <button class="text-gray-400 hover:text-gray-600" onclick="closePizzaModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Size Selection -->
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-900 mb-3">Escolha o tamanho</label>
+                <div class="space-y-3" id="sizeOptions">
+                    <!-- Size options will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Quantity -->
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-900 mb-3">Quantidade</label>
+                <div class="flex items-center gap-4">
+                    <button class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors" onclick="changeQuantity(-1)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                            <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128Z"></path>
+                        </svg>
+                    </button>
+                    <span class="text-xl font-bold min-w-[3ch] text-center" id="modalQuantity">1</span>
+                    <button class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors" onclick="changeQuantity(1)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                            <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Observations -->
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-900 mb-2">Observações</label>
+                <textarea
+                    placeholder="Ex: sem cebola, massa fina, borda recheada..."
+                    class="w-full h-20 px-3 py-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm"
+                    id="modalObservations"
+                ></textarea>
+            </div>
+
+            <!-- Total and Add Button -->
+            <div class="border-t pt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-900">Total:</span>
+                    <span class="text-2xl font-bold text-[#d2440e]" id="modalTotal">R$ 35,90</span>
+                </div>
+                <button
+                    class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transition-all"
+                    onclick="addToCart()"
+                >
+                    Adicionar ao Carrinho
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cart Sidebar -->
+<div id="cartSidebar" class="fixed right-0 top-0 h-full w-96 bg-white shadow-xl z-50 transform translate-x-full transition-transform">
+    <div class="p-6 border-b">
+        <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold text-gray-900">Meu Carrinho</h3>
+            <button class="text-gray-400 hover:text-gray-600" onclick="toggleCart()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <div class="flex-1 overflow-y-auto p-6" id="cartItems">
+        <div class="text-center text-gray-500 py-8">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 256 256" class="mx-auto mb-4 opacity-50">
+                <path d="M222.14,58.87A8,8,0,0,0,216,56H54.68L49.79,29.14A16,16,0,0,0,34.05,16H16a8,8,0,0,0,0,16H34.05l26.94,120.72A24,24,0,0,0,84.1,168h87.73a24,24,0,0,0,23.61-19.71L208.1,64.87A8,8,0,0,0,222.14,58.87Z"></path>
+            </svg>
+            <p>Seu carrinho está vazio</p>
+        </div>
+    </div>
+    
+    <div class="border-t p-6" id="cartFooter" style="display: none;">
+        <div class="flex justify-between items-center mb-4">
+            <span class="text-lg font-semibold">Total:</span>
+            <span class="text-2xl font-bold text-[#d2440e]" id="cartTotal">R$ 0,00</span>
+        </div>
+        <button class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transition-all" onclick="proceedToCheckout()">
+            Finalizar Pedido
+        </button>
+    </div>
+</div>
+
+<script>
+// Global variables
+const API_BASE = 'http://localhost:8080/api/v1';
+let cart = [];
+let currentPizza = null;
+let selectedSize = 'MEDIUM';
+
+// Load pizzas from API
+function loadPizzas() {
+    // API Call: GET /api/v1/cardapio/pizzas
+    console.log(`API Call: GET ${API_BASE}/cardapio/pizzas`);
+    
+    // This would populate the grid with actual data from API
+    // The current data is hardcoded for prototype purposes
+}
+
+// Filter pizzas by category
+function filterCategory(category) {
+    // Update active filter button
+    document.querySelectorAll('[id^="filter-"]').forEach(btn => {
+        btn.classList.remove('bg-[#d2440e]', 'text-white');
+        btn.classList.add('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+    });
+    
+    document.getElementById(`filter-${category}`).classList.remove('bg-white', 'border', 'border-gray-300', 'text-gray-700');
+    document.getElementById(`filter-${category}`).classList.add('bg-[#d2440e]', 'text-white');
+
+    // Filter pizza cards
+    const cards = document.querySelectorAll('.pizza-card');
+    cards.forEach(card => {
+        if (category === 'ALL' || card.dataset.category === category) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // API Call: GET /api/v1/cardapio/pizzas/category/{category} or GET /api/v1/cardapio/pizzas
+    const endpoint = category === 'ALL' ? `${API_BASE}/cardapio/pizzas` : `${API_BASE}/cardapio/pizzas/category/${category}`;
+    console.log(`API Call: GET ${endpoint}`);
+}
+
+// Show vegetarian pizzas
+function showVegetarian() {
+    // API Call: GET /api/v1/cardapio/pizzas/vegetarian
+    console.log(`API Call: GET ${API_BASE}/cardapio/pizzas/vegetarian`);
+    
+    // Update UI to show only vegetarian pizzas
+    filterCategory('ALL'); // Reset first, then would filter by vegetarian flag
+}
+
+// Search pizzas
+function searchPizzas() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    
+    // API Call: GET /api/v1/cardapio/pizzas/search?name={searchTerm}
+    console.log(`API Call: GET ${API_BASE}/cardapio/pizzas/search?name=${encodeURIComponent(searchTerm)}`);
+    
+    // Filter visible cards based on search
+    const cards = document.querySelectorAll('.pizza-card');
+    cards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        const description = card.querySelector('p').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+// Open pizza modal
+function openPizzaModal(pizzaId, name, description, prices) {
+    currentPizza = { id: pizzaId, name, description, prices };
+    
+    document.getElementById('modalPizzaName').textContent = name;
+    document.getElementById('modalPizzaDescription').textContent = description;
+    
+    // Populate size options
+    const sizeOptions = document.getElementById('sizeOptions');
+    sizeOptions.innerHTML = '';
+    
+    const sizeLabels = {
+        SMALL: 'Pequena (25cm)',
+        MEDIUM: 'Média (30cm)',
+        LARGE: 'Grande (35cm)',
+        EXTRA_LARGE: 'Extra Grande (40cm)'
+    };
+    
+    Object.entries(prices).forEach(([size, price]) => {
+        const isSelected = size === selectedSize;
+        const option = document.createElement('label');
+        option.className = `flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-colors ${isSelected ? 'border-orange-500 bg-orange-50' : 'border-gray-300 hover:border-orange-300'}`;
+        option.innerHTML = `
+            <div class="flex items-center gap-3">
+                <input type="radio" name="pizzaSize" value="${size}" ${isSelected ? 'checked' : ''} class="text-orange-600" onchange="selectSize('${size}')">
+                <span class="font-medium">${sizeLabels[size]}</span>
+            </div>
+            <span class="font-bold text-[#d2440e]">R$ ${price.toFixed(2)}</span>
+        `;
+        sizeOptions.appendChild(option);
+    });
+    
+    // Reset other values
+    document.getElementById('modalQuantity').textContent = '1';
+    document.getElementById('modalObservations').value = '';
+    updateModalTotal();
+    
+    document.getElementById('pizzaModal').classList.remove('hidden');
+    document.getElementById('pizzaModal').classList.add('flex');
+}
+
+// Close pizza modal
+function closePizzaModal() {
+    document.getElementById('pizzaModal').classList.add('hidden');
+    document.getElementById('pizzaModal').classList.remove('flex');
+    selectedSize = 'MEDIUM';
+}
+
+// Select pizza size
+function selectSize(size) {
+    selectedSize = size;
+    updateModalTotal();
+    
+    // Update visual selection
+    document.querySelectorAll('#sizeOptions label').forEach(label => {
+        const radio = label.querySelector('input[type="radio"]');
+        if (radio.value === size) {
+            label.classList.remove('border-gray-300');
+            label.classList.add('border-orange-500', 'bg-orange-50');
+        } else {
+            label.classList.remove('border-orange-500', 'bg-orange-50');
+            label.classList.add('border-gray-300');
+        }
+    });
+}
+
+// Change quantity
+function changeQuantity(delta) {
+    const quantityElement = document.getElementById('modalQuantity');
+    let quantity = parseInt(quantityElement.textContent) + delta;
+    if (quantity < 1) quantity = 1;
+    quantityElement.textContent = quantity;
+    updateModalTotal();
+}
+
+// Update modal total
+function updateModalTotal() {
+    const quantity = parseInt(document.getElementById('modalQuantity').textContent);
+    const price = currentPizza.prices[selectedSize];
+    const total = price * quantity;
+    document.getElementById('modalTotal').textContent = `R$ ${total.toFixed(2)}`;
+}
+
+// Add to cart
+function addToCart() {
+    const quantity = parseInt(document.getElementById('modalQuantity').textContent);
+    const observations = document.getElementById('modalObservations').value;
+    const unitPrice = currentPizza.prices[selectedSize];
+    const totalPrice = unitPrice * quantity;
+    
+    const cartItem = {
+        pizzaId: currentPizza.id,
+        pizzaName: currentPizza.name,
+        size: selectedSize,
+        quantity: quantity,
+        unitPrice: unitPrice,
+        totalPrice: totalPrice,
+        observations: observations
+    };
+    
+    cart.push(cartItem);
+    updateCartUI();
+    closePizzaModal();
+    
+    // Show success message
+    showToast('Pizza adicionada ao carrinho!');
+}
+
+// Update cart UI
+function updateCartUI() {
+    const cartCount = document.getElementById('cartCount');
+    const cartItems = document.getElementById('cartItems');
+    const cartFooter = document.getElementById('cartFooter');
+    const cartTotal = document.getElementById('cartTotal');
+    
+    // Update cart count
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartCount.textContent = totalItems;
+    
+    if (cart.length === 0) {
+        cartItems.innerHTML = `
+            <div class="text-center text-gray-500 py-8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 256 256" class="mx-auto mb-4 opacity-50">
+                    <path d="M222.14,58.87A8,8,0,0,0,216,56H54.68L49.79,29.14A16,16,0,0,0,34.05,16H16a8,8,0,0,0,0,16H34.05l26.94,120.72A24,24,0,0,0,84.1,168h87.73a24,24,0,0,0,23.61-19.71L208.1,64.87A8,8,0,0,0,222.14,58.87Z"></path>
+                </svg>
+                <p>Seu carrinho está vazio</p>
+            </div>
+        `;
+        cartFooter.style.display = 'none';
+    } else {
+        cartItems.innerHTML = cart.map((item, index) => `
+            <div class="border-b pb-4 mb-4">
+                <div class="flex justify-between items-start mb-2">
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-900">${item.pizzaName}</h4>
+                        <p class="text-sm text-gray-600">${getSizeLabel(item.size)} - Qtd: ${item.quantity}</p>
+                        ${item.observations ? `<p class="text-xs text-gray-500 italic">${item.observations}</p>` : ''}
+                    </div>
+                    <button class="text-red-500 hover:text-red-700 ml-2" onclick="removeFromCart(${index})">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                            <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16Z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="text-right">
+                    <span class="font-bold text-[#d2440e]">R$ ${item.totalPrice.toFixed(2)}</span>
+                </div>
+            </div>
+        `).join('');
+        
+        // Update total
+        const total = cart.reduce((sum, item) => sum + item.totalPrice, 0);
+        cartTotal.textContent = `R$ ${total.toFixed(2)}`;
+        cartFooter.style.display = 'block';
+    }
+}
+
+// Remove from cart
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCartUI();
+    showToast('Item removido do carrinho');
+}
+
+// Toggle cart sidebar
+function toggleCart() {
+    const cartSidebar = document.getElementById('cartSidebar');
+    cartSidebar.classList.toggle('translate-x-full');
+}
+
+// Get size label
+function getSizeLabel(size) {
+    const labels = {
+        SMALL: 'Pequena',
+        MEDIUM: 'Média',
+        LARGE: 'Grande',
+        EXTRA_LARGE: 'Extra Grande'
+    };
+    return labels[size] || size;
+}
+
+// Proceed to checkout
+function proceedToCheckout() {
+    if (cart.length === 0) {
+        showToast('Adicione itens ao carrinho primeiro');
+        return;
+    }
+    
+    // Navigate to checkout page
+    window.location.href = 'customer_checkout.html';
+}
+
+// Show toast notification
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-y-0 transition-transform';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('translate-y-full');
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, 3000);
+}
+
+// Load more pizzas
+function loadMorePizzas() {
+    // API Call: GET /api/v1/cardapio/pizzas with pagination
+    console.log(`API Call: GET ${API_BASE}/cardapio/pizzas?page=2`);
+    showToast('Carregando mais pizzas...');
+}
+
+// Toggle favorite
+function toggleFavorite(pizzaId) {
+    // This would require user authentication
+    console.log(`Toggle favorite for pizza ${pizzaId}`);
+    showToast('Entre ou cadastre-se para favoritar pizzas');
+}
+
+// Initialize page
+window.onload = function() {
+    loadPizzas();
+    updateCartUI();
+};
+</script>
+
+</body>
+</html>

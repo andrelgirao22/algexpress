@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+        rel="stylesheet"
+        as="style"
+        onload="this.rel='stylesheet'"
+        href="https://fonts.googleapis.com/css2?display=swap&family=Inter%3Awght%40400%3B500%3B700%3B900&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+    <title>Clientes - AlgExpress</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body>
+<div class="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+    <div class="layout-container flex h-full grow flex-col">
+        <!-- Header -->
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf4] px-10 py-3">
+            <div class="flex items-center gap-4 text-[#0d141c]">
+                <div class="size-4">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor"></path>
+                    </svg>
+                </div>
+                <h2 class="text-[#0d141c] text-lg font-bold leading-tight tracking-[-0.015em]">AlgExpress</h2>
+            </div>
+            <div class="flex flex-1 justify-end gap-8">
+                <div class="flex items-center gap-9">
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/dashboard">Dashboard</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/orders">Pedidos</a>
+                    <a class="text-[#0d80f2] text-sm font-medium leading-normal" href="/customers">Clientes</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/menu">Cardápio</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/deliveries">Entregas</a>
+                </div>
+                <div
+                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                    style='background-image: url("https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face");'
+                ></div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="px-40 flex flex-1 justify-center py-5">
+            <div class="layout-content-container flex flex-col max-w-[1200px] flex-1">
+                
+                <!-- Page Header -->
+                <div class="flex flex-wrap justify-between gap-3 p-4">
+                    <div class="flex min-w-72 flex-col gap-3">
+                        <p class="text-[#0d141c] tracking-light text-[32px] font-bold leading-tight">Clientes</p>
+                        <p class="text-[#49739c] text-sm font-normal leading-normal">Gerencie sua base de clientes e seus endereços</p>
+                    </div>
+                    <button
+                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#0d80f2] text-slate-50 text-sm font-bold leading-normal tracking-[0.015em]"
+                        onclick="openCreateCustomerModal()"
+                    >
+                        <span class="truncate">Novo Cliente</span>
+                    </button>
+                </div>
+
+                <!-- Filters and Search -->
+                <div class="flex gap-3 p-3 flex-wrap items-center">
+                    <!-- Status Filters -->
+                    <div class="flex gap-2">
+                        <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#0d80f2] text-white pl-4 pr-4 cursor-pointer" onclick="filterByStatus('ALL')">
+                            <p class="text-sm font-medium leading-normal">Todos</p>
+                        </div>
+                        <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf4] pl-4 pr-4 cursor-pointer" onclick="filterByStatus('ACTIVE')">
+                            <p class="text-[#0d141c] text-sm font-medium leading-normal">Ativos</p>
+                        </div>
+                        <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf4] pl-4 pr-4 cursor-pointer" onclick="filterByStatus('INACTIVE')">
+                            <p class="text-[#0d141c] text-sm font-medium leading-normal">Inativos</p>
+                        </div>
+                        <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf4] pl-4 pr-4 cursor-pointer" onclick="filterByStatus('BLOCKED')">
+                            <p class="text-[#0d141c] text-sm font-medium leading-normal">Bloqueados</p>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar -->
+                    <div class="flex-1 max-w-[400px]">
+                        <div class="flex w-full flex-1 items-stretch rounded-lg h-8">
+                            <div class="text-[#49739c] flex border-none bg-[#e7edf4] items-center justify-center pl-3 rounded-l-lg border-r-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" viewBox="0 0 256 256">
+                                    <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                                </svg>
+                            </div>
+                            <input
+                                placeholder="Buscar por nome, email ou telefone..."
+                                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0d141c] focus:outline-0 focus:ring-0 border-none bg-[#e7edf4] focus:border-none h-full placeholder:text-[#49739c] px-3 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal"
+                                id="searchInput"
+                                onkeyup="searchCustomers()"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="flex gap-4 p-4">
+                    <div class="flex min-w-[180px] flex-1 flex-col gap-2 rounded-lg p-4 bg-[#e7edf4]">
+                        <p class="text-[#0d141c] text-sm font-medium leading-normal">Total de Clientes</p>
+                        <p class="text-[#0d141c] tracking-light text-xl font-bold leading-tight" id="totalCustomers">247</p>
+                    </div>
+                    <div class="flex min-w-[180px] flex-1 flex-col gap-2 rounded-lg p-4 bg-[#e7edf4]">
+                        <p class="text-[#0d141c] text-sm font-medium leading-normal">Clientes Ativos</p>
+                        <p class="text-[#0d141c] tracking-light text-xl font-bold leading-tight" id="activeCustomers">189</p>
+                    </div>
+                    <div class="flex min-w-[180px] flex-1 flex-col gap-2 rounded-lg p-4 bg-[#e7edf4]">
+                        <p class="text-[#0d141c] text-sm font-medium leading-normal">Média de Pontos</p>
+                        <p class="text-[#0d141c] tracking-light text-xl font-bold leading-tight" id="avgLoyaltyPoints">45</p>
+                    </div>
+                    <div class="flex min-w-[180px] flex-1 flex-col gap-2 rounded-lg p-4 bg-[#e7edf4]">
+                        <p class="text-[#0d141c] text-sm font-medium leading-normal">Novos Este Mês</p>
+                        <p class="text-[#0d141c] tracking-light text-xl font-bold leading-tight" id="newThisMonth">23</p>
+                    </div>
+                </div>
+
+                <!-- Customers Table -->
+                <div class="px-4 py-3">
+                    <div class="flex overflow-hidden rounded-lg border border-[#cedbe8] bg-slate-50">
+                        <table class="flex-1" id="customersTable">
+                            <thead>
+                                <tr class="bg-slate-50">
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Nome</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Email</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Telefone</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Status</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Pontos</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Cadastro</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersTableBody">
+                                <tr class="border-t border-t-[#cedbe8] cursor-pointer hover:bg-gray-50" onclick="viewCustomerDetails(1)">
+                                    <td class="px-4 py-3 text-[#0d141c] text-sm font-normal leading-normal">João Silva Santos</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">joao.santos@email.com</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">(11) 99888-7777</td>
+                                    <td class="px-4 py-3">
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">ACTIVE</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-[#0d141c] text-sm font-bold leading-normal">125</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">15/03/2024</td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex gap-2">
+                                            <button class="text-blue-600 hover:text-blue-800 text-xs" onclick="event.stopPropagation(); editCustomer(1)">Editar</button>
+                                            <button class="text-purple-600 hover:text-purple-800 text-xs" onclick="event.stopPropagation(); manageAddresses(1)">Endereços</button>
+                                            <button class="text-orange-600 hover:text-orange-800 text-xs" onclick="event.stopPropagation(); manageLoyalty(1)">Pontos</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="border-t border-t-[#cedbe8] cursor-pointer hover:bg-gray-50" onclick="viewCustomerDetails(2)">
+                                    <td class="px-4 py-3 text-[#0d141c] text-sm font-normal leading-normal">Maria Oliveira</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">maria.oliveira@gmail.com</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">(11) 95555-4444</td>
+                                    <td class="px-4 py-3">
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">ACTIVE</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-[#0d141c] text-sm font-bold leading-normal">89</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">22/02/2024</td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex gap-2">
+                                            <button class="text-blue-600 hover:text-blue-800 text-xs" onclick="event.stopPropagation(); editCustomer(2)">Editar</button>
+                                            <button class="text-purple-600 hover:text-purple-800 text-xs" onclick="event.stopPropagation(); manageAddresses(2)">Endereços</button>
+                                            <button class="text-orange-600 hover:text-orange-800 text-xs" onclick="event.stopPropagation(); manageLoyalty(2)">Pontos</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="border-t border-t-[#cedbe8] cursor-pointer hover:bg-gray-50" onclick="viewCustomerDetails(3)">
+                                    <td class="px-4 py-3 text-[#0d141c] text-sm font-normal leading-normal">Carlos Roberto</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">carlos.roberto@hotmail.com</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">(11) 94444-3333</td>
+                                    <td class="px-4 py-3">
+                                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-medium">INACTIVE</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-[#0d141c] text-sm font-bold leading-normal">12</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">08/01/2024</td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex gap-2">
+                                            <button class="text-blue-600 hover:text-blue-800 text-xs" onclick="event.stopPropagation(); editCustomer(3)">Editar</button>
+                                            <button class="text-purple-600 hover:text-purple-800 text-xs" onclick="event.stopPropagation(); manageAddresses(3)">Endereços</button>
+                                            <button class="text-green-600 hover:text-green-800 text-xs" onclick="event.stopPropagation(); activateCustomer(3)">Ativar</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="border-t border-t-[#cedbe8] cursor-pointer hover:bg-gray-50" onclick="viewCustomerDetails(4)">
+                                    <td class="px-4 py-3 text-[#0d141c] text-sm font-normal leading-normal">Ana Paula Silva</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">ana.paula@yahoo.com</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">(11) 93333-2222</td>
+                                    <td class="px-4 py-3">
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">ACTIVE</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-[#0d141c] text-sm font-bold leading-normal">234</td>
+                                    <td class="px-4 py-3 text-[#49739c] text-sm font-normal leading-normal">12/12/2023</td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex gap-2">
+                                            <button class="text-blue-600 hover:text-blue-800 text-xs" onclick="event.stopPropagation(); editCustomer(4)">Editar</button>
+                                            <button class="text-purple-600 hover:text-purple-800 text-xs" onclick="event.stopPropagation(); manageAddresses(4)">Endereços</button>
+                                            <button class="text-orange-600 hover:text-orange-800 text-xs" onclick="event.stopPropagation(); manageLoyalty(4)">Pontos</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex justify-between items-center px-4 py-3">
+                    <p class="text-[#49739c] text-sm font-normal leading-normal">Mostrando 1-4 de 247 clientes</p>
+                    <div class="flex gap-2">
+                        <button class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e7edf4] text-[#0d141c]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"></path>
+                            </svg>
+                        </button>
+                        <button class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0d80f2] text-white">1</button>
+                        <button class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e7edf4] text-[#0d141c]">2</button>
+                        <button class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e7edf4] text-[#0d141c]">3</button>
+                        <button class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e7edf4] text-[#0d141c]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M90.34,53.66a8,8,0,0,1,11.32-11.32l80,80a8,8,0,0,1,0,11.32l-80,80a8,8,0,0,1-11.32-11.32L164.69,128Z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Simulate API calls
+const API_BASE = 'http://localhost:8080/api/v1';
+
+function filterByStatus(status) {
+    // Update active filter button
+    document.querySelectorAll('.flex.h-8').forEach(btn => {
+        if (btn.querySelector('p')) {
+            btn.classList.remove('bg-[#0d80f2]', 'text-white');
+            btn.classList.add('bg-[#e7edf4]');
+            btn.querySelector('p').classList.remove('text-white');
+            btn.querySelector('p').classList.add('text-[#0d141c]');
+        }
+    });
+    
+    event.target.closest('.flex.h-8').classList.remove('bg-[#e7edf4]');
+    event.target.closest('.flex.h-8').classList.add('bg-[#0d80f2]', 'text-white');
+    event.target.closest('.flex.h-8').querySelector('p').classList.remove('text-[#0d141c]');
+    event.target.closest('.flex.h-8').querySelector('p').classList.add('text-white');
+
+    // API Call: GET /api/v1/clientes/status/{status} or GET /api/v1/clientes
+    const endpoint = status === 'ALL' ? `${API_BASE}/clientes` : `${API_BASE}/clientes/status/${status}`;
+    console.log(`Filtering customers by status: ${status}`);
+    console.log(`API Call: GET ${endpoint}`);
+}
+
+function searchCustomers() {
+    const searchTerm = document.getElementById('searchInput').value;
+    // API Call: GET /api/v1/clientes/search?name={searchTerm}
+    console.log(`Searching customers: ${searchTerm}`);
+    console.log(`API Call: GET ${API_BASE}/clientes/search?name=${encodeURIComponent(searchTerm)}`);
+}
+
+function viewCustomerDetails(customerId) {
+    // API Call: GET /api/v1/clientes/{id}
+    console.log(`Viewing customer details for customer ${customerId}`);
+    console.log(`API Call: GET ${API_BASE}/clientes/${customerId}`);
+    
+    window.open(`customer_detail.html?id=${customerId}`, '_blank');
+}
+
+function editCustomer(customerId) {
+    // API Call: GET /api/v1/clientes/{id} to load data, then PUT /api/v1/clientes/{id} to update
+    console.log(`Editing customer ${customerId}`);
+    console.log(`API Call: GET ${API_BASE}/clientes/${customerId}`);
+    
+    window.open(`edit_customer.html?id=${customerId}`, '_blank');
+}
+
+function manageAddresses(customerId) {
+    // API Call: GET /api/v1/clientes/{customerId}/enderecos
+    console.log(`Managing addresses for customer ${customerId}`);
+    console.log(`API Call: GET ${API_BASE}/clientes/${customerId}/enderecos`);
+    
+    window.open(`customer_addresses.html?customerId=${customerId}`, '_blank');
+}
+
+function manageLoyalty(customerId) {
+    // Show loyalty points management modal
+    console.log(`Managing loyalty points for customer ${customerId}`);
+    const points = prompt('Adicionar pontos de fidelidade:');
+    if (points && !isNaN(points)) {
+        // API Call: PATCH /api/v1/clientes/{id}/loyalty-points/add?points={points}
+        console.log(`API Call: PATCH ${API_BASE}/clientes/${customerId}/loyalty-points/add?points=${points}`);
+        alert(`${points} pontos adicionados ao cliente`);
+        loadCustomers();
+    }
+}
+
+function activateCustomer(customerId) {
+    // API Call: PATCH /api/v1/clientes/{id}/activate
+    console.log(`Activating customer ${customerId}`);
+    console.log(`API Call: PATCH ${API_BASE}/clientes/${customerId}/activate`);
+    
+    alert('Cliente ativado com sucesso!');
+    loadCustomers();
+}
+
+function openCreateCustomerModal() {
+    window.open('create_customer.html', '_blank');
+}
+
+function loadCustomers() {
+    // API Call: GET /api/v1/clientes (returns CustomerSummaryDTO[])
+    console.log(`Loading customers`);
+    console.log(`API Call: GET ${API_BASE}/clientes`);
+    
+    // Load statistics
+    loadCustomerStatistics();
+}
+
+function loadCustomerStatistics() {
+    // API Calls for statistics
+    console.log(`API Call: GET ${API_BASE}/clientes/statistics/total-active`);
+    console.log(`API Call: GET ${API_BASE}/clientes/statistics/average-loyalty-points`);
+    console.log(`API Call: GET ${API_BASE}/clientes/statistics/count-by-status?status=ACTIVE`);
+}
+
+// Load customers on page load
+window.onload = function() {
+    loadCustomers();
+};
+</script>
+
+</body>
+</html>

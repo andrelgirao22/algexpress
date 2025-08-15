@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+        rel="stylesheet"
+        as="style"
+        onload="this.rel='stylesheet'"
+        href="https://fonts.googleapis.com/css2?display=swap&family=Inter%3Awght%40400%3B500%3B700%3B900&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+    <title>Pedidos - AlgExpress</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body>
+<div class="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+    <div class="layout-container flex h-full grow flex-col">
+        <!-- Header -->
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf4] px-10 py-3">
+            <div class="flex items-center gap-4 text-[#0d141c]">
+                <div class="size-4">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor"></path>
+                    </svg>
+                </div>
+                <h2 class="text-[#0d141c] text-lg font-bold leading-tight tracking-[-0.015em]">AlgExpress</h2>
+            </div>
+            <div class="flex flex-1 justify-end gap-8">
+                <div class="flex items-center gap-9">
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/dashboard">Dashboard</a>
+                    <a class="text-[#0d80f2] text-sm font-medium leading-normal" href="/orders">Pedidos</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/customers">Clientes</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/menu">Cardápio</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/deliveries">Entregas</a>
+                </div>
+                <div
+                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                    style='background-image: url("https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face");'
+                ></div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="px-40 flex flex-1 justify-center py-5">
+            <div class="layout-content-container flex flex-col max-w-[1200px] flex-1">
+                
+                <!-- Page Header -->
+                <div class="flex flex-wrap justify-between gap-3 p-4">
+                    <div class="flex min-w-72 flex-col gap-3">
+                        <p class="text-[#0d141c] tracking-light text-[32px] font-bold leading-tight">Pedidos</p>
+                        <p class="text-[#49739c] text-sm font-normal leading-normal">Gerencie todos os pedidos da pizzaria</p>
+                    </div>
+                    <button
+                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#0d80f2] text-slate-50 text-sm font-bold leading-normal tracking-[0.015em]"
+                        onclick="openCreateOrderModal()"
+                    >
+                        <span class="truncate">Novo Pedido</span>
+                    </button>
+                </div>
+
+                <!-- Filters Section -->
+                <div class="flex gap-3 p-3 flex-wrap pr-4">
+                    <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#0d80f2] text-white pl-4 pr-4 cursor-pointer" onclick="filterByStatus('ALL')">
+                        <p class="text-sm font-medium leading-normal">Todos</p>
+                    </div>
+                    <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf4] pl-4 pr-4 cursor-pointer" onclick="filterByStatus('PENDING')">
+                        <p class="text-[#0d141c] text-sm font-medium leading-normal">Pendentes</p>
+                    </div>
+                    <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf4] pl-4 pr-4 cursor-pointer" onclick="filterByStatus('IN_PREPARATION')">
+                        <p class="text-[#0d141c] text-sm font-medium leading-normal">Em Preparo</p>
+                    </div>
+                    <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf4] pl-4 pr-4 cursor-pointer" onclick="filterByStatus('READY')">
+                        <p class="text-[#0d141c] text-sm font-medium leading-normal">Prontos</p>
+                    </div>
+                    <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf4] pl-4 pr-4 cursor-pointer" onclick="filterByStatus('OUT_FOR_DELIVERY')">
+                        <p class="text-[#0d141c] text-sm font-medium leading-normal">Em Entrega</p>
+                    </div>
+                    <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf4] pl-4 pr-4 cursor-pointer" onclick="filterByStatus('DELIVERED')">
+                        <p class="text-[#0d141c] text-sm font-medium leading-normal">Entregues</p>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
+                    <label class="flex flex-col min-w-40 flex-1">
+                        <div class="flex w-full flex-1 items-stretch rounded-lg h-10">
+                            <div class="text-[#49739c] flex border-none bg-[#e7edf4] items-center justify-center pl-4 rounded-l-lg border-r-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
+                                    <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                                </svg>
+                            </div>
+                            <input
+                                placeholder="Buscar por cliente ou número do pedido..."
+                                class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0d141c] focus:outline-0 focus:ring-0 border-none bg-[#e7edf4] focus:border-none h-full placeholder:text-[#49739c] px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal"
+                                id="searchInput"
+                                onkeyup="searchOrders()"
+                            />
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="px-4 py-3">
+                    <div class="flex overflow-hidden rounded-lg border border-[#cedbe8] bg-slate-50">
+                        <table class="flex-1" id="ordersTable">
+                            <thead>
+                                <tr class="bg-slate-50">
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">ID</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Cliente</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Tipo</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Status</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Horário</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Total</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Itens</th>
+                                    <th class="px-4 py-3 text-left text-[#0d141c] text-sm font-medium leading-normal">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody">
+                                <tr class="border-t border-t-[#cedbe8] cursor-pointer hover:bg-gray-50" onclick="viewOrderDetails(1)">
+                                    <td class="px-4 py-2 text-[#0d141c] text-sm font-normal leading-normal">#001</td>
+                                    <td class="px-4 py-2 text-[#0d141c] text-sm font-normal leading-normal">João Silva</td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">
+                                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">DELIVERY</span>
+                                    </td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">
+                                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">PENDING</span>
+                                    </td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">14:30</td>
+                                    <td class="px-4 py-2 text-[#0d141c] text-sm font-bold leading-normal">R$ 45,90</td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">2</td>
+                                    <td class="px-4 py-2">
+                                        <select class="text-xs bg-white border rounded px-2 py-1" onchange="updateOrderStatus(1, this.value)">
+                                            <option value="PENDING" selected>Pendente</option>
+                                            <option value="CONFIRMED">Confirmar</option>
+                                            <option value="IN_PREPARATION">Em Preparo</option>
+                                            <option value="READY">Pronto</option>
+                                            <option value="OUT_FOR_DELIVERY">Em Entrega</option>
+                                            <option value="DELIVERED">Entregue</option>
+                                            <option value="CANCELLED">Cancelar</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="border-t border-t-[#cedbe8] cursor-pointer hover:bg-gray-50" onclick="viewOrderDetails(2)">
+                                    <td class="px-4 py-2 text-[#0d141c] text-sm font-normal leading-normal">#002</td>
+                                    <td class="px-4 py-2 text-[#0d141c] text-sm font-normal leading-normal">Maria Santos</td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">PICKUP</span>
+                                    </td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">
+                                        <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">IN_PREPARATION</span>
+                                    </td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">14:15</td>
+                                    <td class="px-4 py-2 text-[#0d141c] text-sm font-bold leading-normal">R$ 32,50</td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">1</td>
+                                    <td class="px-4 py-2">
+                                        <select class="text-xs bg-white border rounded px-2 py-1" onchange="updateOrderStatus(2, this.value)">
+                                            <option value="PENDING">Pendente</option>
+                                            <option value="CONFIRMED">Confirmar</option>
+                                            <option value="IN_PREPARATION" selected>Em Preparo</option>
+                                            <option value="READY">Pronto</option>
+                                            <option value="OUT_FOR_DELIVERY">Em Entrega</option>
+                                            <option value="DELIVERED">Entregue</option>
+                                            <option value="CANCELLED">Cancelar</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="border-t border-t-[#cedbe8] cursor-pointer hover:bg-gray-50" onclick="viewOrderDetails(3)">
+                                    <td class="px-4 py-2 text-[#0d141c] text-sm font-normal leading-normal">#003</td>
+                                    <td class="px-4 py-2 text-[#0d141c] text-sm font-normal leading-normal">Carlos Lima</td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">
+                                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">DELIVERY</span>
+                                    </td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">
+                                        <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">OUT_FOR_DELIVERY</span>
+                                    </td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">13:45</td>
+                                    <td class="px-4 py-2 text-[#0d141c] text-sm font-bold leading-normal">R$ 58,30</td>
+                                    <td class="px-4 py-2 text-[#49739c] text-sm font-normal leading-normal">3</td>
+                                    <td class="px-4 py-2">
+                                        <select class="text-xs bg-white border rounded px-2 py-1" onchange="updateOrderStatus(3, this.value)">
+                                            <option value="PENDING">Pendente</option>
+                                            <option value="CONFIRMED">Confirmar</option>
+                                            <option value="IN_PREPARATION">Em Preparo</option>
+                                            <option value="READY">Pronto</option>
+                                            <option value="OUT_FOR_DELIVERY" selected>Em Entrega</option>
+                                            <option value="DELIVERED">Entregue</option>
+                                            <option value="CANCELLED">Cancelar</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex justify-between items-center px-4 py-3">
+                    <p class="text-[#49739c] text-sm font-normal leading-normal">Mostrando 1-3 de 15 pedidos</p>
+                    <div class="flex gap-2">
+                        <button class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e7edf4] text-[#0d141c]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"></path>
+                            </svg>
+                        </button>
+                        <button class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0d80f2] text-white">1</button>
+                        <button class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e7edf4] text-[#0d141c]">2</button>
+                        <button class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e7edf4] text-[#0d141c]">3</button>
+                        <button class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e7edf4] text-[#0d141c]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M90.34,53.66a8,8,0,0,1,11.32-11.32l80,80a8,8,0,0,1,0,11.32l-80,80a8,8,0,0,1-11.32-11.32L164.69,128Z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Simulate API calls - replace with actual API endpoints
+const API_BASE = 'http://localhost:8080/api/v1';
+
+function filterByStatus(status) {
+    // Update active filter button
+    document.querySelectorAll('.flex.h-8').forEach(btn => {
+        btn.classList.remove('bg-[#0d80f2]', 'text-white');
+        btn.classList.add('bg-[#e7edf4]');
+        btn.querySelector('p').classList.remove('text-white');
+        btn.querySelector('p').classList.add('text-[#0d141c]');
+    });
+    
+    event.target.closest('.flex.h-8').classList.remove('bg-[#e7edf4]');
+    event.target.closest('.flex.h-8').classList.add('bg-[#0d80f2]', 'text-white');
+    event.target.closest('.flex.h-8').querySelector('p').classList.remove('text-[#0d141c]');
+    event.target.closest('.flex.h-8').querySelector('p').classList.add('text-white');
+
+    // API Call: GET /api/v1/pedidos/status/{status} or GET /api/v1/pedidos
+    const endpoint = status === 'ALL' ? `${API_BASE}/pedidos` : `${API_BASE}/pedidos/status/${status}`;
+    console.log(`Filtering orders by status: ${status}`);
+    console.log(`API Call: GET ${endpoint}`);
+}
+
+function searchOrders() {
+    const searchTerm = document.getElementById('searchInput').value;
+    // API Call: Search implementation would depend on backend search endpoint
+    console.log(`Searching orders: ${searchTerm}`);
+    console.log(`API Call: GET ${API_BASE}/pedidos with search parameter`);
+}
+
+function updateOrderStatus(orderId, newStatus) {
+    // API Call: PATCH /api/v1/pedidos/{id}/status
+    console.log(`Updating order ${orderId} status to ${newStatus}`);
+    console.log(`API Call: PATCH ${API_BASE}/pedidos/${orderId}/status?status=${newStatus}`);
+    
+    // Simulate success
+    alert(`Pedido #${orderId} atualizado para ${newStatus}`);
+    // Refresh the orders list
+    loadOrders();
+}
+
+function viewOrderDetails(orderId) {
+    // API Call: GET /api/v1/pedidos/{id}
+    console.log(`Viewing order details for order ${orderId}`);
+    console.log(`API Call: GET ${API_BASE}/pedidos/${orderId}`);
+    
+    // Navigate to order detail page or open modal
+    window.open(`order_detail.html?id=${orderId}`, '_blank');
+}
+
+function openCreateOrderModal() {
+    // Navigate to create order page
+    window.open('create_order.html', '_blank');
+}
+
+function loadOrders() {
+    // API Call: GET /api/v1/pedidos
+    console.log(`Loading orders`);
+    console.log(`API Call: GET ${API_BASE}/pedidos`);
+    
+    // This would populate the table with actual data
+    // The current data is hardcoded for prototype purposes
+}
+
+// Load orders on page load
+window.onload = function() {
+    loadOrders();
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+        rel="stylesheet"
+        as="style"
+        onload="this.rel='stylesheet'"
+        href="https://fonts.googleapis.com/css2?display=swap&family=Inter%3Awght%40400%3B500%3B700%3B900&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+    <title>Finalizar Pedido - AlgExpress</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body>
+<div class="relative flex size-full min-h-screen flex-col bg-gradient-to-br from-orange-50 to-red-50 group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+    
+    <!-- Header -->
+    <header class="flex items-center justify-between whitespace-nowrap bg-white shadow-sm px-10 py-4">
+        <div class="flex items-center gap-4 text-[#d2440e]">
+            <div class="size-8">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor"></path>
+                </svg>
+            </div>
+            <h1 class="text-[#d2440e] text-2xl font-bold leading-tight tracking-[-0.015em]">AlgExpress</h1>
+        </div>
+        <div class="flex gap-4">
+            <a href="public_menu.html" class="text-[#d2440e] text-sm font-medium hover:text-red-600">Voltar ao Cardápio</a>
+            <a href="customer_account.html" class="bg-[#d2440e] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-600">Minha Conta</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex justify-center p-8">
+        <div class="w-full max-w-6xl">
+            
+            <!-- Progress Steps -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                <div class="flex items-center justify-center">
+                    <div class="flex items-center w-full max-w-2xl">
+                        <!-- Step 1 -->
+                        <div class="flex items-center flex-1">
+                            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold">✓</div>
+                            <div class="ml-2 text-sm font-medium text-gray-700">Cardápio</div>
+                        </div>
+                        <div class="h-1 bg-green-500 flex-1 mx-4"></div>
+                        
+                        <!-- Step 2 -->
+                        <div class="flex items-center flex-1">
+                            <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
+                            <div class="ml-2 text-sm font-medium text-orange-600">Finalizar</div>
+                        </div>
+                        <div class="h-1 bg-gray-300 flex-1 mx-4"></div>
+                        
+                        <!-- Step 3 -->
+                        <div class="flex items-center flex-1">
+                            <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-sm font-bold">3</div>
+                            <div class="ml-2 text-sm font-medium text-gray-500">Confirmação</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Left Side - Customer & Delivery Info -->
+                <div class="lg:col-span-2 space-y-6">
+                    
+                    <!-- Customer Information -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-900 mb-6">Seus Dados</h2>
+                        
+                        <!-- Logged User Info -->
+                        <div id="loggedUserInfo" class="hidden">
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#10b981" viewBox="0 0 256 256">
+                                            <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-gray-900" id="userName">João Silva Santos</div>
+                                        <div class="text-sm text-gray-600" id="userEmail">joao@email.com</div>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <button class="text-orange-600 hover:text-orange-700 text-sm font-medium" onclick="logout()">Sair</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Guest Checkout Form -->
+                        <div id="guestCheckoutForm">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nome completo *</label>
+                                    <input type="text" id="customerName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Telefone *</label>
+                                    <input type="tel" id="customerPhone" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="(11) 99999-9999" onkeyup="formatPhone(this)">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                                    <input type="email" id="customerEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="seu@email.com">
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 text-center">
+                                <p class="text-sm text-gray-600">
+                                    Já tem uma conta? 
+                                    <a href="customer_login.html" class="text-orange-600 hover:text-orange-700 font-medium">Faça login aqui</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Options -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-900 mb-6">Forma de Entrega</h2>
+                        
+                        <div class="space-y-4">
+                            <label class="flex items-start gap-4 p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-orange-300 transition-colors">
+                                <input type="radio" name="deliveryType" value="DELIVERY" class="mt-1" onchange="handleDeliveryTypeChange()" checked>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#d2440e" viewBox="0 0 256 256">
+                                            <path d="M247.42,117l-14-35A15.93,15.93,0,0,0,218.58,72H184V64a8,8,0,0,0-8-8H24A16,16,0,0,0,8,72V184a16,16,0,0,0,16,16H41a32,32,0,0,0,62,0h50a32,32,0,0,0,62,0h17a16,16,0,0,0,16-16V120A7.94,7.94,0,0,0,247.42,117ZM72,208a16,16,0,1,1,16-16A16,16,0,0,1,72,208Zm112,0a16,16,0,1,1,16-16A16,16,0,0,1,184,208Zm-8-24h-17a32,32,0,0,0-62,0H41a32,32,0,0,0-62,0H24V72H168v80h16Z"></path>
+                                        </svg>
+                                        <span class="font-semibold text-gray-900">Entrega</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Receba em casa. Taxa de entrega calculada pelo endereço.</p>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-4 p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-orange-300 transition-colors">
+                                <input type="radio" name="deliveryType" value="PICKUP" class="mt-1" onchange="handleDeliveryTypeChange()">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#d2440e" viewBox="0 0 256 256">
+                                            <path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"></path>
+                                        </svg>
+                                        <span class="font-semibold text-gray-900">Retirada</span>
+                                        <span class="text-green-600 text-sm font-medium">GRÁTIS</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Retire na loja. Sem taxa de entrega.</p>
+                                    <p class="text-xs text-gray-500 mt-1">Rua das Pizzas, 123 - Centro</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Address Form (for delivery) -->
+                        <div id="addressForm" class="mt-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Endereço de Entrega</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">CEP *</label>
+                                    <input type="text" id="cep" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="00000-000" onkeyup="formatCEP(this)" onblur="fetchAddress()">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Rua *</label>
+                                    <input type="text" id="street" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Número *</label>
+                                    <input type="text" id="number" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Complemento</label>
+                                    <input type="text" id="complement" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Apto, casa, etc.">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Bairro *</label>
+                                    <input type="text" id="neighborhood" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Cidade *</label>
+                                    <input type="text" id="city" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-900 mb-6">Forma de Pagamento</h2>
+                        
+                        <div class="space-y-4">
+                            <label class="flex items-start gap-4 p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-orange-300 transition-colors">
+                                <input type="radio" name="paymentMethod" value="MONEY" class="mt-1" onchange="handlePaymentMethodChange()" checked>
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#22c55e" viewBox="0 0 256 256">
+                                            <path d="M128,88a40,40,0,1,0,40,40A40,40,0,0,0,128,88Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,152ZM240,56H16a8,8,0,0,0-8,8V192a8,8,0,0,0,8,8H240a8,8,0,0,0,8-8V64A8,8,0,0,0,240,56ZM232,184H24V72H232Z"></path>
+                                        </svg>
+                                        <span class="font-semibold text-gray-900">Dinheiro</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Pagamento na entrega ou retirada.</p>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-4 p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-orange-300 transition-colors">
+                                <input type="radio" name="paymentMethod" value="CARD" class="mt-1" onchange="handlePaymentMethodChange()">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#3b82f6" viewBox="0 0 256 256">
+                                            <path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM32,88H224v16H32ZM224,192H32V128H224v64Z"></path>
+                                        </svg>
+                                        <span class="font-semibold text-gray-900">Cartão</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Débito ou crédito na entrega/retirada.</p>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-4 p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-orange-300 transition-colors">
+                                <input type="radio" name="paymentMethod" value="PIX" class="mt-1" onchange="handlePaymentMethodChange()">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#8b5cf6" viewBox="0 0 256 256">
+                                            <path d="M235.32,73.37,182.63,20.69a16,16,0,0,0-22.63,0L128,52.68,96,20.68a16,16,0,0,0-22.63,0L20.68,73.37a16,16,0,0,0,0,22.63L52.68,128,20.68,160a16,16,0,0,0,0,22.63l52.69,52.68a16,16,0,0,0,22.63,0L128,203.32l32,32a16,16,0,0,0,22.63,0l52.69-52.68a16,16,0,0,0,0-22.63L203.32,128l32-32A16,16,0,0,0,235.32,73.37ZM192,107.31,148.69,64,192,20.68,235.31,64ZM64,20.68,107.31,64,64,107.31,20.69,64ZM20.68,192,64,148.69,107.31,192,64,235.31ZM192,235.31,148.69,192,192,148.69,235.31,192Z"></path>
+                                        </svg>
+                                        <span class="font-semibold text-gray-900">PIX</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Pagamento instantâneo via PIX.</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Change Required (for money payment) -->
+                        <div id="changeSection" class="mt-6">
+                            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                <h4 class="font-semibold text-gray-900 mb-3">Precisa de troco?</h4>
+                                <div class="flex items-center gap-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="needChange" value="no" class="mr-2" onchange="handleChangeNeed()" checked>
+                                        <span class="text-sm text-gray-700">Não preciso</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="needChange" value="yes" class="mr-2" onchange="handleChangeNeed()">
+                                        <span class="text-sm text-gray-700">Sim, preciso</span>
+                                    </label>
+                                </div>
+                                <div id="changeAmountInput" class="mt-3 hidden">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Valor para troco</label>
+                                    <input type="number" id="changeAmount" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="Ex: 100.00">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Observações Adicionais</h2>
+                        <textarea 
+                            id="orderNotes" 
+                            rows="3" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none" 
+                            placeholder="Informações adicionais sobre seu pedido..."
+                        ></textarea>
+                    </div>
+                </div>
+
+                <!-- Right Side - Order Summary -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-xl shadow-lg p-6 sticky top-4">
+                        <h2 class="text-xl font-bold text-gray-900 mb-6">Resumo do Pedido</h2>
+                        
+                        <!-- Order Items -->
+                        <div id="orderItems" class="space-y-4 mb-6">
+                            <!-- Items will be loaded from localStorage -->
+                        </div>
+
+                        <!-- Order Totals -->
+                        <div class="border-t pt-6 space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Subtotal:</span>
+                                <span class="font-semibold" id="subtotal">R$ 0,00</span>
+                            </div>
+                            <div class="flex justify-between" id="deliveryFeeRow">
+                                <span class="text-gray-600">Taxa de entrega:</span>
+                                <span class="font-semibold" id="deliveryFee">R$ 8,50</span>
+                            </div>
+                            <div class="flex justify-between text-lg font-bold border-t pt-3">
+                                <span>Total:</span>
+                                <span class="text-orange-600" id="total">R$ 0,00</span>
+                            </div>
+                        </div>
+
+                        <!-- Place Order Button -->
+                        <button 
+                            class="w-full bg-gradient-to-r from-orange-500 to-red-500 text-white py-4 px-6 rounded-lg font-semibold hover:from-orange-600 hover:to-red-600 transition-all transform hover:scale-105 shadow-lg mt-6"
+                            onclick="placeOrder()"
+                            id="placeOrderBtn"
+                        >
+                            Finalizar Pedido
+                        </button>
+
+                        <!-- Security Info -->
+                        <div class="mt-4 text-center">
+                            <div class="flex items-center justify-center gap-2 text-sm text-gray-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                                    <path d="M208,40H48A24,24,0,0,0,24,64V192a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V64A24,24,0,0,0,208,40ZM40,192V64a8,8,0,0,1,8-8H208a8,8,0,0,1,8,8V192a8,8,0,0,1-8,8H48A8,8,0,0,1,40,192Zm56-88a16,16,0,1,1-16-16A16,16,0,0,1,96,104Zm80,0a16,16,0,1,1-16-16A16,16,0,0,1,176,104Zm-16,36c-8.84,0-16,7.16-16,16a8,8,0,0,1-16,0,32,32,0,0,1,64,0A8,8,0,0,1,160,140Z"></path>
+                                </svg>
+                                <span>Pedido seguro e protegido</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t py-6">
+        <div class="max-w-4xl mx-auto px-8 text-center">
+            <p class="text-sm text-gray-600">
+                © 2024 AlgExpress. Todos os direitos reservados. 
+                <span class="mx-2">•</span>
+                <a href="#" class="text-orange-600 hover:text-orange-700">Termos</a>
+                <span class="mx-2">•</span>
+                <a href="#" class="text-orange-600 hover:text-orange-700">Privacidade</a>
+            </p>
+        </div>
+    </footer>
+</div>
+
+<script>
+const API_BASE = 'http://localhost:8080/api/v1';
+
+// Format phone number
+function formatPhone(input) {
+    let value = input.value.replace(/\D/g, '');
+    value = value.replace(/(\d{2})(\d)/, '($1) $2');
+    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+    input.value = value;
+}
+
+// Format CEP
+function formatCEP(input) {
+    let value = input.value.replace(/\D/g, '');
+    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+    input.value = value;
+}
+
+// Fetch address by CEP
+async function fetchAddress() {
+    const cep = document.getElementById('cep').value.replace(/\D/g, '');
+    if (cep.length === 8) {
+        try {
+            // Simulate CEP API call
+            console.log(`Fetching address for CEP: ${cep}`);
+            // In production, use a real CEP API like ViaCEP
+            
+            // Mock data
+            const address = {
+                street: 'Rua das Flores',
+                neighborhood: 'Centro',
+                city: 'São Paulo'
+            };
+            
+            document.getElementById('street').value = address.street;
+            document.getElementById('neighborhood').value = address.neighborhood;
+            document.getElementById('city').value = address.city;
+            
+            calculateDeliveryFee();
+        } catch (error) {
+            console.error('Error fetching address:', error);
+        }
+    }
+}
+
+// Handle delivery type change
+function handleDeliveryTypeChange() {
+    const deliveryType = document.querySelector('input[name="deliveryType"]:checked').value;
+    const addressForm = document.getElementById('addressForm');
+    const deliveryFeeRow = document.getElementById('deliveryFeeRow');
+    
+    if (deliveryType === 'DELIVERY') {
+        addressForm.style.display = 'block';
+        deliveryFeeRow.style.display = 'flex';
+    } else {
+        addressForm.style.display = 'none';
+        deliveryFeeRow.style.display = 'none';
+    }
+    
+    updateOrderTotals();
+}
+
+// Handle payment method change
+function handlePaymentMethodChange() {
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+    const changeSection = document.getElementById('changeSection');
+    
+    if (paymentMethod === 'MONEY') {
+        changeSection.style.display = 'block';
+    } else {
+        changeSection.style.display = 'none';
+    }
+}
+
+// Handle change need
+function handleChangeNeed() {
+    const needChange = document.querySelector('input[name="needChange"]:checked').value;
+    const changeAmountInput = document.getElementById('changeAmountInput');
+    
+    if (needChange === 'yes') {
+        changeAmountInput.classList.remove('hidden');
+    } else {
+        changeAmountInput.classList.add('hidden');
+    }
+}
+
+// Calculate delivery fee based on address
+function calculateDeliveryFee() {
+    const city = document.getElementById('city').value;
+    const neighborhood = document.getElementById('neighborhood').value;
+    
+    // Simple delivery fee calculation
+    let fee = 8.50; // Default fee
+    
+    if (city.toLowerCase().includes('centro')) {
+        fee = 6.00;
+    } else if (neighborhood.toLowerCase().includes('centro')) {
+        fee = 7.00;
+    }
+    
+    document.getElementById('deliveryFee').textContent = `R$ ${fee.toFixed(2)}`;
+    updateOrderTotals();
+}
+
+// Load cart items from localStorage
+function loadCartItems() {
+    const cart = JSON.parse(localStorage.getItem('algexpress_cart') || '[]');
+    const orderItemsContainer = document.getElementById('orderItems');
+    
+    if (cart.length === 0) {
+        orderItemsContainer.innerHTML = '<p class="text-gray-500 text-center py-4">Nenhum item no carrinho</p>';
+        return;
+    }
+    
+    orderItemsContainer.innerHTML = cart.map(item => `
+        <div class="flex gap-4 pb-4 border-b border-gray-200 last:border-b-0">
+            <div class="flex-1">
+                <h3 class="font-semibold text-gray-900">${item.name}</h3>
+                <p class="text-sm text-gray-600">${item.size}</p>
+                <p class="text-sm text-gray-500">Qtd: ${item.quantity}</p>
+                ${item.observations ? `<p class="text-xs text-gray-500 italic">${item.observations}</p>` : ''}
+            </div>
+            <div class="text-right">
+                <p class="font-semibold text-gray-900">R$ ${item.total.toFixed(2)}</p>
+            </div>
+        </div>
+    `).join('');
+    
+    updateOrderTotals();
+}
+
+// Update order totals
+function updateOrderTotals() {
+    const cart = JSON.parse(localStorage.getItem('algexpress_cart') || '[]');
+    const subtotal = cart.reduce((total, item) => total + item.total, 0);
+    
+    let deliveryFee = 0;
+    const deliveryType = document.querySelector('input[name="deliveryType"]:checked').value;
+    if (deliveryType === 'DELIVERY') {
+        deliveryFee = parseFloat(document.getElementById('deliveryFee').textContent.replace('R$ ', '').replace(',', '.')) || 8.50;
+    }
+    
+    const total = subtotal + deliveryFee;
+    
+    document.getElementById('subtotal').textContent = `R$ ${subtotal.toFixed(2)}`;
+    document.getElementById('total').textContent = `R$ ${total.toFixed(2)}`;
+}
+
+// Place order
+async function placeOrder() {
+    const btn = document.getElementById('placeOrderBtn');
+    const originalText = btn.textContent;
+    
+    // Validate form
+    if (!validateOrderForm()) {
+        return;
+    }
+    
+    // Disable button
+    btn.disabled = true;
+    btn.textContent = 'Processando...';
+    btn.classList.add('opacity-50');
+    
+    try {
+        const orderData = collectOrderData();
+        
+        // API Call: POST /api/v1/pedidos
+        console.log(`API Call: POST ${API_BASE}/pedidos`);
+        console.log('Order Data:', orderData);
+        
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Clear cart
+        localStorage.removeItem('algexpress_cart');
+        
+        // Redirect to confirmation
+        window.location.href = `customer_order_confirmation.html?orderId=12345`;
+        
+    } catch (error) {
+        console.error('Error placing order:', error);
+        alert('Erro ao processar pedido. Tente novamente.');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+        btn.classList.remove('opacity-50');
+    }
+}
+
+// Validate order form
+function validateOrderForm() {
+    const requiredFields = ['customerName', 'customerPhone', 'customerEmail'];
+    const deliveryType = document.querySelector('input[name="deliveryType"]:checked').value;
+    
+    if (deliveryType === 'DELIVERY') {
+        requiredFields.push('cep', 'street', 'number', 'neighborhood', 'city');
+    }
+    
+    for (const fieldId of requiredFields) {
+        const field = document.getElementById(fieldId);
+        if (!field.value.trim()) {
+            alert(`Por favor, preencha o campo ${field.previousElementSibling.textContent}`);
+            field.focus();
+            return false;
+        }
+    }
+    
+    const cart = JSON.parse(localStorage.getItem('algexpress_cart') || '[]');
+    if (cart.length === 0) {
+        alert('Adicione pelo menos um item ao carrinho');
+        return false;
+    }
+    
+    return true;
+}
+
+// Collect order data
+function collectOrderData() {
+    const cart = JSON.parse(localStorage.getItem('algexpress_cart') || '[]');
+    const deliveryType = document.querySelector('input[name="deliveryType"]:checked').value;
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+    
+    const orderData = {
+        customer: {
+            name: document.getElementById('customerName').value,
+            phone: document.getElementById('customerPhone').value.replace(/\D/g, ''),
+            email: document.getElementById('customerEmail').value
+        },
+        type: deliveryType,
+        paymentMethod: paymentMethod,
+        items: cart.map(item => ({
+            pizzaId: item.id,
+            size: item.size,
+            quantity: item.quantity,
+            observations: item.observations
+        })),
+        observations: document.getElementById('orderNotes').value
+    };
+    
+    if (deliveryType === 'DELIVERY') {
+        orderData.address = {
+            cep: document.getElementById('cep').value.replace(/\D/g, ''),
+            street: document.getElementById('street').value,
+            number: document.getElementById('number').value,
+            complement: document.getElementById('complement').value,
+            neighborhood: document.getElementById('neighborhood').value,
+            city: document.getElementById('city').value
+        };
+    }
+    
+    if (paymentMethod === 'MONEY') {
+        const needChange = document.querySelector('input[name="needChange"]:checked').value;
+        if (needChange === 'yes') {
+            orderData.changeFor = parseFloat(document.getElementById('changeAmount').value);
+        }
+    }
+    
+    return orderData;
+}
+
+// Check if user is logged in
+function checkLoginStatus() {
+    const user = JSON.parse(localStorage.getItem('algexpress_user') || 'null');
+    if (user) {
+        document.getElementById('loggedUserInfo').classList.remove('hidden');
+        document.getElementById('guestCheckoutForm').style.display = 'none';
+        document.getElementById('userName').textContent = user.name;
+        document.getElementById('userEmail').textContent = user.email;
+        
+        // Pre-fill customer data
+        document.getElementById('customerName').value = user.name;
+        document.getElementById('customerPhone').value = user.phone;
+        document.getElementById('customerEmail').value = user.email;
+    }
+}
+
+// Logout function
+function logout() {
+    localStorage.removeItem('algexpress_user');
+    location.reload();
+}
+
+// Initialize page
+window.onload = function() {
+    checkLoginStatus();
+    loadCartItems();
+    handleDeliveryTypeChange();
+    handlePaymentMethodChange();
+};
+</script>
+
+</body>
+</html>

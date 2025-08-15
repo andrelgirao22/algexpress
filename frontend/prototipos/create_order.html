@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+        rel="stylesheet"
+        as="style"
+        onload="this.rel='stylesheet'"
+        href="https://fonts.googleapis.com/css2?display=swap&family=Inter%3Awght%40400%3B500%3B700%3B900&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+    <title>Novo Pedido - AlgExpress</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body>
+<div class="relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+    <div class="layout-container flex h-full grow flex-col">
+        <!-- Header -->
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7edf4] px-10 py-3">
+            <div class="flex items-center gap-4 text-[#0d141c]">
+                <div class="size-4">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor"></path>
+                    </svg>
+                </div>
+                <h2 class="text-[#0d141c] text-lg font-bold leading-tight tracking-[-0.015em]">AlgExpress</h2>
+            </div>
+            <div class="flex flex-1 justify-end gap-8">
+                <div class="flex items-center gap-9">
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/dashboard">Dashboard</a>
+                    <a class="text-[#0d80f2] text-sm font-medium leading-normal" href="/orders">Pedidos</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/customers">Clientes</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/menu">Cardápio</a>
+                    <a class="text-[#0d141c] text-sm font-medium leading-normal" href="/deliveries">Entregas</a>
+                </div>
+                <div
+                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+                    style='background-image: url("https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face");'
+                ></div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="px-40 flex flex-1 justify-center py-5">
+            <div class="layout-content-container flex flex-col max-w-[1200px] flex-1">
+                
+                <!-- Page Header -->
+                <div class="flex flex-wrap justify-between gap-3 p-4">
+                    <div class="flex min-w-72 flex-col gap-3">
+                        <p class="text-[#0d141c] tracking-light text-[32px] font-bold leading-tight">Novo Pedido</p>
+                        <p class="text-[#49739c] text-sm font-normal leading-normal">Crie um novo pedido para um cliente</p>
+                    </div>
+                    <button
+                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#e7edf4] text-[#0d141c] text-sm font-bold leading-normal tracking-[0.015em]"
+                        onclick="window.close()"
+                    >
+                        <span class="truncate">Cancelar</span>
+                    </button>
+                </div>
+
+                <div class="flex gap-6 p-4">
+                    <!-- Left Side - Order Form -->
+                    <div class="flex-1 max-w-[700px]">
+                        
+                        <!-- Customer Selection -->
+                        <div class="bg-white rounded-lg border border-[#cedbe8] p-6 mb-6">
+                            <h3 class="text-lg font-bold text-[#0d141c] mb-4">1. Selecionar Cliente</h3>
+                            
+                            <!-- Customer Search -->
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-[#0d141c] mb-2">Buscar Cliente</label>
+                                <div class="flex w-full items-stretch rounded-lg">
+                                    <div class="text-[#49739c] flex border bg-[#e7edf4] items-center justify-center pl-3 rounded-l-lg border-r-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" viewBox="0 0 256 256">
+                                            <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                                        </svg>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Digite nome, telefone ou email..."
+                                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0d141c] focus:outline-0 focus:ring-0 border bg-[#e7edf4] focus:border-[#cedbe8] h-10 placeholder:text-[#49739c] px-3 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal"
+                                        id="customerSearch"
+                                        onkeyup="searchCustomers()"
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- Customer Results -->
+                            <div id="customerResults" class="mb-4 hidden">
+                                <div class="border rounded-lg bg-gray-50 max-h-40 overflow-y-auto">
+                                    <div class="p-3 border-b cursor-pointer hover:bg-gray-100" onclick="selectCustomer(1, 'João Silva Santos', 'joao@email.com', '(11) 99999-9999')">
+                                        <div class="font-medium text-[#0d141c]">João Silva Santos</div>
+                                        <div class="text-sm text-[#49739c]">joao@email.com - (11) 99999-9999</div>
+                                    </div>
+                                    <div class="p-3 border-b cursor-pointer hover:bg-gray-100" onclick="selectCustomer(2, 'Maria Oliveira', 'maria@email.com', '(11) 88888-8888')">
+                                        <div class="font-medium text-[#0d141c]">Maria Oliveira</div>
+                                        <div class="text-sm text-[#49739c]">maria@email.com - (11) 88888-8888</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Selected Customer -->
+                            <div id="selectedCustomer" class="hidden">
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <div class="font-medium text-[#0d141c]" id="selectedCustomerName"></div>
+                                            <div class="text-sm text-[#49739c]" id="selectedCustomerContact"></div>
+                                        </div>
+                                        <button class="text-red-600 hover:text-red-800 text-sm" onclick="clearCustomerSelection()">Remover</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Type -->
+                        <div class="bg-white rounded-lg border border-[#cedbe8] p-6 mb-6">
+                            <h3 class="text-lg font-bold text-[#0d141c] mb-4">2. Tipo do Pedido</h3>
+                            <div class="flex gap-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="orderType" value="DELIVERY" class="mr-2" onchange="handleOrderTypeChange()" checked>
+                                    <span class="text-[#0d141c]">Entrega</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="orderType" value="PICKUP" class="mr-2" onchange="handleOrderTypeChange()">
+                                    <span class="text-[#0d141c]">Retirada</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="orderType" value="DINE_IN" class="mr-2" onchange="handleOrderTypeChange()">
+                                    <span class="text-[#0d141c]">No Local</span>
+                                </label>
+                            </div>
+
+                            <!-- Address Selection (for delivery) -->
+                            <div id="addressSelection" class="mt-4">
+                                <label class="block text-sm font-medium text-[#0d141c] mb-2">Endereço de Entrega</label>
+                                <select id="addressSelect" class="form-select w-full border border-[#cedbe8] rounded-lg px-3 py-2 text-sm">
+                                    <option value="">Selecione um endereço...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Pizza Selection -->
+                        <div class="bg-white rounded-lg border border-[#cedbe8] p-6 mb-6">
+                            <h3 class="text-lg font-bold text-[#0d141c] mb-4">3. Selecionar Pizzas</h3>
+                            
+                            <!-- Pizza Search -->
+                            <div class="mb-4">
+                                <div class="flex w-full items-stretch rounded-lg">
+                                    <div class="text-[#49739c] flex border bg-[#e7edf4] items-center justify-center pl-3 rounded-l-lg border-r-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill="currentColor" viewBox="0 0 256 256">
+                                            <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+                                        </svg>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar pizzas..."
+                                        class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#0d141c] focus:outline-0 focus:ring-0 border bg-[#e7edf4] focus:border-[#cedbe8] h-10 placeholder:text-[#49739c] px-3 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal"
+                                        id="pizzaSearch"
+                                        onkeyup="searchPizzas()"
+                                    />
+                                </div>
+                            </div>
+
+                            <!-- Available Pizzas Grid -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-80 overflow-y-auto" id="pizzasGrid">
+                                
+                                <!-- Pizza Option 1 -->
+                                <div class="border border-[#cedbe8] rounded-lg p-4 hover:border-blue-300 cursor-pointer" onclick="addPizzaToOrder(1, 'Margherita', 'Molho de tomate, mozzarella e manjericão')">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <h4 class="font-medium text-[#0d141c]">Margherita</h4>
+                                        <button class="text-blue-600 hover:text-blue-800 text-sm font-medium">Adicionar</button>
+                                    </div>
+                                    <p class="text-sm text-[#49739c] mb-2">Molho de tomate, mozzarella e manjericão</p>
+                                    <div class="grid grid-cols-2 gap-1 text-xs">
+                                        <div><span class="text-[#49739c]">P:</span> R$ 25,90</div>
+                                        <div><span class="text-[#49739c]">M:</span> R$ 35,90</div>
+                                        <div><span class="text-[#49739c]">G:</span> R$ 45,90</div>
+                                        <div><span class="text-[#49739c]">GG:</span> R$ 55,90</div>
+                                    </div>
+                                </div>
+
+                                <!-- Pizza Option 2 -->
+                                <div class="border border-[#cedbe8] rounded-lg p-4 hover:border-blue-300 cursor-pointer" onclick="addPizzaToOrder(2, 'Pepperoni', 'Molho de tomate, mozzarella e pepperoni')">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <h4 class="font-medium text-[#0d141c]">Pepperoni</h4>
+                                        <button class="text-blue-600 hover:text-blue-800 text-sm font-medium">Adicionar</button>
+                                    </div>
+                                    <p class="text-sm text-[#49739c] mb-2">Molho de tomate, mozzarella e pepperoni</p>
+                                    <div class="grid grid-cols-2 gap-1 text-xs">
+                                        <div><span class="text-[#49739c]">P:</span> R$ 28,90</div>
+                                        <div><span class="text-[#49739c]">M:</span> R$ 38,90</div>
+                                        <div><span class="text-[#49739c]">G:</span> R$ 48,90</div>
+                                        <div><span class="text-[#49739c]">GG:</span> R$ 58,90</div>
+                                    </div>
+                                </div>
+
+                                <!-- Pizza Option 3 -->
+                                <div class="border border-[#cedbe8] rounded-lg p-4 hover:border-blue-300 cursor-pointer" onclick="addPizzaToOrder(3, 'Quattro Formaggi', 'Molho branco e quatro queijos')">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <h4 class="font-medium text-[#0d141c]">Quattro Formaggi</h4>
+                                        <button class="text-blue-600 hover:text-blue-800 text-sm font-medium">Adicionar</button>
+                                    </div>
+                                    <p class="text-sm text-[#49739c] mb-2">Molho branco e quatro queijos</p>
+                                    <div class="grid grid-cols-2 gap-1 text-xs">
+                                        <div><span class="text-[#49739c]">P:</span> R$ 32,90</div>
+                                        <div><span class="text-[#49739c]">M:</span> R$ 42,90</div>
+                                        <div><span class="text-[#49739c]">G:</span> R$ 52,90</div>
+                                        <div><span class="text-[#49739c]">GG:</span> R$ 62,90</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Observations -->
+                        <div class="bg-white rounded-lg border border-[#cedbe8] p-6 mb-6">
+                            <h3 class="text-lg font-bold text-[#0d141c] mb-4">4. Observações</h3>
+                            <textarea
+                                placeholder="Observações adicionais para o pedido..."
+                                class="form-textarea w-full h-20 border border-[#cedbe8] rounded-lg px-3 py-2 text-sm resize-none"
+                                id="orderObservations"
+                            ></textarea>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Side - Order Summary -->
+                    <div class="w-80">
+                        <div class="bg-white rounded-lg border border-[#cedbe8] p-6 sticky top-4">
+                            <h3 class="text-lg font-bold text-[#0d141c] mb-4">Resumo do Pedido</h3>
+                            
+                            <!-- Order Items -->
+                            <div id="orderItems" class="mb-4">
+                                <p class="text-[#49739c] text-sm text-center py-4">Nenhum item adicionado</p>
+                            </div>
+
+                            <!-- Order Totals -->
+                            <div class="border-t pt-4">
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-[#49739c] text-sm">Subtotal:</span>
+                                    <span class="text-[#0d141c] text-sm font-medium" id="subtotal">R$ 0,00</span>
+                                </div>
+                                <div class="flex justify-between mb-2" id="deliveryFeeRow" style="display: none;">
+                                    <span class="text-[#49739c] text-sm">Taxa de entrega:</span>
+                                    <span class="text-[#0d141c] text-sm font-medium" id="deliveryFee">R$ 0,00</span>
+                                </div>
+                                <div class="flex justify-between mb-4 border-t pt-2">
+                                    <span class="text-[#0d141c] font-bold">Total:</span>
+                                    <span class="text-[#0d141c] font-bold" id="total">R$ 0,00</span>
+                                </div>
+                            </div>
+
+                            <!-- Create Order Button -->
+                            <button
+                                class="w-full bg-[#0d80f2] text-white py-3 rounded-lg font-bold hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                                id="createOrderBtn"
+                                onclick="createOrder()"
+                                disabled
+                            >
+                                Criar Pedido
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pizza Customization Modal -->
+<div id="pizzaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <h3 class="text-lg font-bold text-[#0d141c] mb-4" id="modalPizzaName">Pizza Margherita</h3>
+        
+        <!-- Size Selection -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-[#0d141c] mb-2">Tamanho</label>
+            <select id="pizzaSize" class="form-select w-full border border-[#cedbe8] rounded-lg px-3 py-2 text-sm" onchange="updatePizzaPrice()">
+                <option value="SMALL">Pequena - R$ 25,90</option>
+                <option value="MEDIUM" selected>Média - R$ 35,90</option>
+                <option value="LARGE">Grande - R$ 45,90</option>
+                <option value="EXTRA_LARGE">Extra Grande - R$ 55,90</option>
+            </select>
+        </div>
+
+        <!-- Quantity -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-[#0d141c] mb-2">Quantidade</label>
+            <div class="flex items-center gap-3">
+                <button class="bg-[#e7edf4] text-[#0d141c] w-8 h-8 rounded flex items-center justify-center" onclick="changeQuantity(-1)">-</button>
+                <span class="text-[#0d141c] font-medium" id="pizzaQuantity">1</span>
+                <button class="bg-[#e7edf4] text-[#0d141c] w-8 h-8 rounded flex items-center justify-center" onclick="changeQuantity(1)">+</button>
+            </div>
+        </div>
+
+        <!-- Observations -->
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-[#0d141c] mb-2">Observações</label>
+            <textarea
+                placeholder="Ex: sem cebola, massa fina..."
+                class="form-textarea w-full h-16 border border-[#cedbe8] rounded-lg px-3 py-2 text-sm resize-none"
+                id="pizzaObservations"
+            ></textarea>
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="flex gap-3">
+            <button class="flex-1 bg-[#e7edf4] text-[#0d141c] py-2 rounded-lg font-medium" onclick="closePizzaModal()">Cancelar</button>
+            <button class="flex-1 bg-[#0d80f2] text-white py-2 rounded-lg font-medium" onclick="confirmAddPizza()">Adicionar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Global variables
+const API_BASE = 'http://localhost:8080/api/v1';
+let selectedCustomer = null;
+let selectedCustomerAddresses = [];
+let orderItems = [];
+let currentPizza = null;
+
+// Customer search and selection
+function searchCustomers() {
+    const searchTerm = document.getElementById('customerSearch').value;
+    if (searchTerm.length >= 3) {
+        // API Call: GET /api/v1/clientes/search?name={searchTerm}
+        console.log(`API Call: GET ${API_BASE}/clientes/search?name=${encodeURIComponent(searchTerm)}`);
+        document.getElementById('customerResults').classList.remove('hidden');
+    } else {
+        document.getElementById('customerResults').classList.add('hidden');
+    }
+}
+
+function selectCustomer(id, name, email, phone) {
+    selectedCustomer = { id, name, email, phone };
+    document.getElementById('selectedCustomerName').textContent = name;
+    document.getElementById('selectedCustomerContact').textContent = `${email} - ${phone}`;
+    document.getElementById('customerResults').classList.add('hidden');
+    document.getElementById('selectedCustomer').classList.remove('hidden');
+    
+    // Load customer addresses for delivery
+    loadCustomerAddresses(id);
+    updateCreateOrderButton();
+}
+
+function clearCustomerSelection() {
+    selectedCustomer = null;
+    selectedCustomerAddresses = [];
+    document.getElementById('selectedCustomer').classList.add('hidden');
+    document.getElementById('customerSearch').value = '';
+    document.getElementById('addressSelect').innerHTML = '<option value="">Selecione um endereço...</option>';
+    updateCreateOrderButton();
+}
+
+function loadCustomerAddresses(customerId) {
+    // API Call: GET /api/v1/clientes/{customerId}/enderecos
+    console.log(`API Call: GET ${API_BASE}/clientes/${customerId}/enderecos`);
+    
+    // Simulate loading addresses
+    selectedCustomerAddresses = [
+        { id: 1, street: 'Rua das Flores, 123', neighborhood: 'Centro', deliveryFee: 5.00 },
+        { id: 2, street: 'Av. Paulista, 456', neighborhood: 'Bela Vista', deliveryFee: 7.50 }
+    ];
+    
+    const addressSelect = document.getElementById('addressSelect');
+    addressSelect.innerHTML = '<option value="">Selecione um endereço...</option>';
+    
+    selectedCustomerAddresses.forEach(address => {
+        const option = document.createElement('option');
+        option.value = address.id;
+        option.textContent = `${address.street}, ${address.neighborhood} - Taxa: R$ ${address.deliveryFee.toFixed(2)}`;
+        addressSelect.appendChild(option);
+    });
+}
+
+// Order type handling
+function handleOrderTypeChange() {
+    const orderType = document.querySelector('input[name="orderType"]:checked').value;
+    const addressSelection = document.getElementById('addressSelection');
+    
+    if (orderType === 'DELIVERY') {
+        addressSelection.style.display = 'block';
+        document.getElementById('deliveryFeeRow').style.display = 'flex';
+    } else {
+        addressSelection.style.display = 'none';
+        document.getElementById('deliveryFeeRow').style.display = 'none';
+    }
+    
+    updateOrderTotals();
+}
+
+// Pizza search and selection
+function searchPizzas() {
+    const searchTerm = document.getElementById('pizzaSearch').value;
+    // API Call: GET /api/v1/cardapio/pizzas/search?name={searchTerm}
+    console.log(`API Call: GET ${API_BASE}/cardapio/pizzas/search?name=${encodeURIComponent(searchTerm)}`);
+}
+
+function addPizzaToOrder(pizzaId, name, description) {
+    currentPizza = {
+        id: pizzaId,
+        name: name,
+        description: description,
+        prices: {
+            SMALL: pizzaId === 1 ? 25.90 : pizzaId === 2 ? 28.90 : 32.90,
+            MEDIUM: pizzaId === 1 ? 35.90 : pizzaId === 2 ? 38.90 : 42.90,
+            LARGE: pizzaId === 1 ? 45.90 : pizzaId === 2 ? 48.90 : 52.90,
+            EXTRA_LARGE: pizzaId === 1 ? 55.90 : pizzaId === 2 ? 58.90 : 62.90
+        }
+    };
+    
+    document.getElementById('modalPizzaName').textContent = name;
+    updatePizzaPrice();
+    document.getElementById('pizzaModal').classList.remove('hidden');
+    document.getElementById('pizzaModal').classList.add('flex');
+}
+
+function updatePizzaPrice() {
+    const size = document.getElementById('pizzaSize').value;
+    const sizeOptions = document.getElementById('pizzaSize').options;
+    
+    for (let option of sizeOptions) {
+        const sizeKey = option.value;
+        const price = currentPizza.prices[sizeKey];
+        option.textContent = option.textContent.split(' - ')[0] + ` - R$ ${price.toFixed(2)}`;
+    }
+}
+
+function changeQuantity(delta) {
+    const quantityElement = document.getElementById('pizzaQuantity');
+    let quantity = parseInt(quantityElement.textContent) + delta;
+    if (quantity < 1) quantity = 1;
+    quantityElement.textContent = quantity;
+}
+
+function closePizzaModal() {
+    document.getElementById('pizzaModal').classList.add('hidden');
+    document.getElementById('pizzaModal').classList.remove('flex');
+    // Reset modal
+    document.getElementById('pizzaSize').value = 'MEDIUM';
+    document.getElementById('pizzaQuantity').textContent = '1';
+    document.getElementById('pizzaObservations').value = '';
+}
+
+function confirmAddPizza() {
+    const size = document.getElementById('pizzaSize').value;
+    const quantity = parseInt(document.getElementById('pizzaQuantity').textContent);
+    const observations = document.getElementById('pizzaObservations').value;
+    const unitPrice = currentPizza.prices[size];
+    const totalPrice = unitPrice * quantity;
+    
+    const orderItem = {
+        pizzaId: currentPizza.id,
+        pizzaName: currentPizza.name,
+        size: size,
+        quantity: quantity,
+        unitPrice: unitPrice,
+        totalPrice: totalPrice,
+        observations: observations
+    };
+    
+    orderItems.push(orderItem);
+    closePizzaModal();
+    updateOrderSummary();
+    updateCreateOrderButton();
+}
+
+function removeOrderItem(index) {
+    orderItems.splice(index, 1);
+    updateOrderSummary();
+    updateCreateOrderButton();
+}
+
+function updateOrderSummary() {
+    const orderItemsContainer = document.getElementById('orderItems');
+    
+    if (orderItems.length === 0) {
+        orderItemsContainer.innerHTML = '<p class="text-[#49739c] text-sm text-center py-4">Nenhum item adicionado</p>';
+    } else {
+        orderItemsContainer.innerHTML = orderItems.map((item, index) => `
+            <div class="border-b pb-3 mb-3">
+                <div class="flex justify-between items-start mb-1">
+                    <div class="flex-1">
+                        <div class="font-medium text-[#0d141c] text-sm">${item.pizzaName}</div>
+                        <div class="text-xs text-[#49739c]">${item.size} - Qtd: ${item.quantity}</div>
+                        ${item.observations ? `<div class="text-xs text-[#49739c] italic">${item.observations}</div>` : ''}
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-medium text-[#0d141c]">R$ ${item.totalPrice.toFixed(2)}</div>
+                        <button class="text-red-600 hover:text-red-800 text-xs" onclick="removeOrderItem(${index})">Remover</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    updateOrderTotals();
+}
+
+function updateOrderTotals() {
+    const subtotal = orderItems.reduce((total, item) => total + item.totalPrice, 0);
+    let deliveryFee = 0;
+    
+    const orderType = document.querySelector('input[name="orderType"]:checked').value;
+    if (orderType === 'DELIVERY') {
+        const addressId = document.getElementById('addressSelect').value;
+        if (addressId) {
+            const address = selectedCustomerAddresses.find(addr => addr.id == addressId);
+            if (address) {
+                deliveryFee = address.deliveryFee;
+            }
+        }
+    }
+    
+    const total = subtotal + deliveryFee;
+    
+    document.getElementById('subtotal').textContent = `R$ ${subtotal.toFixed(2)}`;
+    document.getElementById('deliveryFee').textContent = `R$ ${deliveryFee.toFixed(2)}`;
+    document.getElementById('total').textContent = `R$ ${total.toFixed(2)}`;
+}
+
+function updateCreateOrderButton() {
+    const btn = document.getElementById('createOrderBtn');
+    const canCreate = selectedCustomer && orderItems.length > 0;
+    
+    btn.disabled = !canCreate;
+    btn.textContent = canCreate ? 'Criar Pedido' : 'Selecione cliente e itens';
+}
+
+function createOrder() {
+    if (!selectedCustomer || orderItems.length === 0) {
+        alert('Selecione um cliente e adicione pelo menos um item ao pedido.');
+        return;
+    }
+    
+    const orderType = document.querySelector('input[name="orderType"]:checked').value;
+    let addressId = null;
+    
+    if (orderType === 'DELIVERY') {
+        addressId = document.getElementById('addressSelect').value;
+        if (!addressId) {
+            alert('Selecione um endereço para entrega.');
+            return;
+        }
+    }
+    
+    const orderData = {
+        customerId: selectedCustomer.id,
+        type: orderType,
+        addressId: addressId,
+        observations: document.getElementById('orderObservations').value,
+        items: orderItems.map(item => ({
+            pizzaId: item.pizzaId,
+            size: item.size,
+            quantity: item.quantity,
+            observations: item.observations
+        }))
+    };
+    
+    // API Call: POST /api/v1/pedidos
+    console.log(`API Call: POST ${API_BASE}/pedidos`);
+    console.log('Order Data:', orderData);
+    
+    // Simulate success
+    alert('Pedido criado com sucesso!');
+    window.close();
+}
+
+// Load available pizzas on page load
+window.onload = function() {
+    // API Call: GET /api/v1/cardapio/pizzas
+    console.log(`API Call: GET ${API_BASE}/cardapio/pizzas`);
+};
+</script>
+
+</body>
+</html>
